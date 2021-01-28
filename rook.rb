@@ -29,6 +29,8 @@ class Rook
       end
     end
   end
+
+  
 end
 
 game = Chessboard.new
