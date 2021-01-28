@@ -1,16 +1,28 @@
 # Make proper grid, and self.allowed?(move)
 class Chessboard
-  @@board = []
+  attr_accessor :board
   def initialize
+    @board = {}
     for i in 1..8
       for j in 1..8
-        @@board.push([i,j])
+        @board["#{i}, #{j}"] = nil
       end
     end
   end
 
-  def self.allowed?(move)
-    return true if @@board.include? move
+  def allowed?(move)
+    return true if @board.key?("#{move[0]}, #{move[1]}")
+
     false
+  end
+end
+
+# Nodes for the path
+# pos & parent node
+class Node
+  attr_reader :pos, :parent
+  def initialize(pos, parent = nil)
+    @pos = pos
+    @parent = parent
   end
 end
