@@ -3,8 +3,10 @@ require './board.rb'
 # moves, incoporating possible moves using Chessboard.allowed?
 # knight_moves using path_to from Path
 class Knight
-  def initialize(pos = [1,1])
+  def initialize(game, pos = [1,1])
     @pos = pos
+    @game = game
+    game.board["#{pos[0]}, #{pos[1]}"] = 'WK1'
   end
 
   def possible_moves(board, pos = @pos)
@@ -27,7 +29,7 @@ class Knight
   end
 end
 
-game = Chessboard.new
-alex = Knight.new([2,2])
-puts "\nPossible moves from [2,2] are as follows:\n#{alex.possible_moves(game)}"
-alex.knight_moves(game, [7,2])
+# game = Chessboard.new
+# alex = Knight.new([1,1])
+# puts "\nPossible moves from [2,2] are as follows:\n#{alex.possible_moves(game)}"
+# alex.knight_moves(game, [7,2])
