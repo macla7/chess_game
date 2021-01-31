@@ -5,7 +5,7 @@ class Chessboard
     @board = {}
     for i in 1..8
       for j in 1..8
-        @board["#{i}, #{j}"] = nil
+        @board["#{i}, #{j}"] = ' '
       end
     end
   end

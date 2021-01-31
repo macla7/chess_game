@@ -6,7 +6,7 @@ class Knight
   def initialize(game, pos = [1,1])
     @pos = pos
     @game = game
-    game.board["#{pos[0]}, #{pos[1]}"] = 'WK1'
+    game.board["#{pos[0]}, #{pos[1]}"] = 'BK1'
   end
 
   def possible_moves(board, pos = @pos)
