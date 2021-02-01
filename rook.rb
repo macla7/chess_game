@@ -3,10 +3,10 @@ require './new_knight.rb'
 # def a pos
 # moves, incoporating possible moves using Chessboard.allowed?
 class Rook
-  attr_reader :visited, :game
+  attr_reader :possible, :game
   def initialize(game, pos = [1,1])
     @pos = pos
-    @visited = [pos]
+    @possible = [pos]
     @game = game
     game.board["#{pos[0]}, #{pos[1]}"] = 'WR1'
   end
@@ -14,34 +14,37 @@ class Rook
   def possible_left_right(board, pos = @pos)
     # Going to need some kind of recurision here I think.
     for i in [1, -1]
-      if !board.board["#{pos[0]+i}, #{pos[1]}"].nil?
-        if !board.board["#{pos[0]+i}, #{pos[1]}"].match(/^W/) && @visited.none?([pos[0]+i,pos[1]])
-          a = "#{pos[0]+i}, #{pos[1]}"
-          puts a
-          puts a
-          @visited.push(a) if board.allowed? a
-          break if board.board["#{pos[0]+i}, #{pos[1]}"].match(/^B/)
-          possible_left_right(board, a) if board.allowed? a
+      a = "#{pos[0]+i}, #{pos[1]}"
+      b = [pos[0]+i, pos[1]]
+      unless board.board[a].nil?
+        if !board.board[a].match(/^W/) && @possible.none?(b)
+          @possible.push(b) if board.allowed? b
+          break if board.board[a].match(/^B/)
+          possible_left_right(board, b) if board.allowed? b
         end
       end
     end
   end
 
   def possible_up_down(board, pos = @pos)
-    # Going to need some kind of recurision here I think.
     for i in [1, -1]
-      if board.board["#{pos[0]}, #{pos[1]+i}"] == nil && @visited.none?([pos[0],pos[1]+i])
-        a = [pos[0], pos[1]+i]
-        @visited.push(a) if board.allowed? a
-        possible_up_down(board, a) if board.allowed? a
+      a = "#{pos[0]}, #{pos[1]+i}"
+      b = [pos[0], pos[1]+i]
+      unless board.board[a].nil?
+        if !board.board[a].match(/^W/) && @possible.none?(b)
+          @possible.push(b) if board.allowed? b
+          break if board.board[a].match(/^B/)
+          possible_up_down(board, b) if board.allowed? b
+        end
       end
     end
   end
 end
 
 game = Chessboard.new
-alex = Rook.new(game, [1,1])
-fred = Knight.new(game, [3,1])
+alex = Rook.new(game, [5,5])
+fred = Knight.new(game, [5,2])
+ted = Knight.new(game, [2,5])
 alex.possible_left_right(game)
 alex.possible_up_down(game)
-puts "#{alex.visited}"
+alex.possible.each {|i| p i}
