@@ -29,7 +29,7 @@ class Knight
   end
 end
 
-# game = Chessboard.new
-# alex = Knight.new([1,1])
-# puts "\nPossible moves from [2,2] are as follows:\n#{alex.possible_moves(game)}"
-# alex.knight_moves(game, [7,2])
+#game = Chessboard.new
+#alex = Knight.new(game, [1,1])
+#puts "\nPossible moves from [2,2] are as follows:\n#{alex.possible_moves(game)}"
+#alex.knight_moves(game, [7,2])
