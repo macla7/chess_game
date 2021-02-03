@@ -8,16 +8,20 @@ class Rook
     @pos = pos
     @possible = []
     @game = game
-    game.board["#{pos[0]}, #{pos[1]}"] = 'WR1'
+    game.board["#{pos[0]}, #{pos[1]}"] = "\u{2656}"
   end
 
   def move_piece(end_pos)
-    place(end_pos)
+    possible_moves(game)
+    if @possible.include?(end_pos)
+      place(end_pos)
+    else
+      puts "Can't move to #{end_pos}, sorry!"
+    end
   end
 
-
   def place(pos)
-    game.board["#{pos[0]}, #{pos[1]}"] = 'WR1'
+    game.board["#{pos[0]}, #{pos[1]}"] = "\u{2656}"
     @pos = pos
   end
 
@@ -71,6 +75,11 @@ game = Chessboard.new
 alex = Rook.new(game, [6,3])
 p alex.place([5,5])
 james = Knight.new(game, [5,6])
-james12 = Knight.new(game, [6,5])
-p alex.possible_moves(game)
+dav = Knight.new(game, [6,5])
+alex.move_piece([8,8])
 alex.rook_moves(game, [8,8])
+alex.move_piece([5,6])
+alex.move_piece([5,8])
+game.print_board
+
+## NEED TO SORT OUT GETTING RID OF PIECES ONCE MOVED, AND MAKING BLACK AND WHITE SETS TO TELL APART FOR THE ALLOWABLE MOVES ARRAYS.

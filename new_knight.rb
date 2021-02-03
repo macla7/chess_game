@@ -3,10 +3,20 @@ require './board.rb'
 # moves, incoporating possible moves using Chessboard.allowed?
 # knight_moves using path_to from Path
 class Knight
+  attr_reader :pos
   def initialize(game, pos = [1,1])
     @pos = pos
     @game = game
-    game.board["#{pos[0]}, #{pos[1]}"] = 'BK1'
+    game.board["#{pos[0]}, #{pos[1]}"] = "\u{265E}"
+  end
+
+  def move_piece(end_pos)
+    place(end_pos)
+  end
+
+  def place(pos)
+    game.board["#{pos[0]}, #{pos[1]}"] = "\u{265E}"
+    @pos = pos
   end
 
   def possible_moves(board, pos = @pos)

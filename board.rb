@@ -15,6 +15,17 @@ class Chessboard
 
     false
   end
+
+  def print_board
+    8.downto(1) do |i|
+      print '|'
+      for j in 1..8
+        print " #{@board["#{i}, #{j}"]} |"
+      end
+      puts "\n"
+    end
+  end
+
 end
 
 # Nodes for the path
@@ -86,5 +97,4 @@ class Path
       print "\n\n"
     end
   end
-
 end
