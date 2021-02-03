@@ -40,14 +40,7 @@ class Rook
     for i in [1, -1]
       piece_type = game.board["#{pos[0]+i}, #{pos[1]}"]
       b = [pos[0]+i, pos[1]]
-      unless piece_type.nil?
-        if !game.white.include?(piece_type) && @possible.none?(b)
-          @possible.push(b) if game.allowed? b
-          unless game.black.include?(piece_type)
-            possible_left_right(game, b) if game.allowed? b
-          end
-        end
-      end
+      ek(piece_type, b, game, @colour, possible_left_right(game, b))
     end
   end
 
@@ -69,19 +62,21 @@ class Rook
   def ek(piece_type, b, game, colour, func)
     unless piece_type.nil?
       if colour == 'white'
-      if !game.white.include?(piece_type) && @possible.none?(b)
-        @possible.push(b) if game.allowed? b
-        unless game.black.include?(piece_type)
-          func(game, b) if game.allowed? b
+        if !game.white.include?(piece_type) && @possible.none?(b)
+          @possible.push(b) if game.allowed? b
+          unless game.black.include?(piece_type)
+            func if game.allowed? b
+          end
         end
       end
       if colour == 'black'
         if !game.black.include?(piece_type) && @possible.none?(b)
           @possible.push(b) if game.allowed? b
           unless game.white.include?(piece_type)
-            func(game, b) if game.allowed? b
+            func if game.allowed? b
           end
         end
+      end
     end
   end
 
@@ -113,4 +108,4 @@ game.print_board
 dan = Knight.new(game, [3,5])
 dav.move_piece(game, [3,7])
 game.print_board
-## NEED TO SORT OUT GETTING RID OF PIECES ONCE MOVED, AND MAKING BLACK AND WHITE SETS TO TELL APART FOR THE ALLOWABLE MOVES ARRAYS.
+## NEED TO SORT OUT WORKING DIFFERENT COLOURS FOR ROOK AND KNIGHT
