@@ -4,11 +4,10 @@ require './new_knight.rb'
 # moves, incoporating possible moves using Chessboard.allowed?
 class Rook
   attr_reader :possible, :game, :pos
-  def initialize(game, pos = [1,1], colour)
+  def initialize(game,  colour, pos = [1,1])
     @pos = pos
     @possible = []
     @game = game
-    @piece_type = '\u{2656}'
     game.board["#{pos[0]}, #{pos[1]}"] = "\u{2656}"
     @colour = colour
     name = 'WR1'
@@ -39,11 +38,12 @@ class Rook
   def possible_left_right(game, pos = @pos)
     # Going to need some kind of recurision here I think.
     for i in [1, -1]
+      piece_type = game.board["#{pos[0]+i}, #{pos[1]}"]
       b = [pos[0]+i, pos[1]]
-      unless game.board["#{pos[0]+i}, #{pos[1]}"].nil?
-        if !game.white.include?(@piece_type) && @possible.none?(b)
+      unless piece_type.nil?
+        if !game.white.include?(piece_type) && @possible.none?(b)
           @possible.push(b) if game.allowed? b
-          unless game.black.include?(@piece_type)
+          unless game.black.include?(piece_type)
             possible_left_right(game, b) if game.allowed? b
           end
         end
@@ -53,15 +53,35 @@ class Rook
 
   def possible_up_down(game, pos = @pos)
     for i in [1, -1]
+      piece_type = game.board["#{pos[0]}, #{pos[1]+i}"]
       b = [pos[0], pos[1]+i]
-      unless game.board["#{pos[0]}, #{pos[1]+i}"].nil?
-        if !game.white.include?(@piece_type) && @possible.none?(b)
+      unless piece_type.nil?
+        if !game.white.include?(piece_type) && @possible.none?(b)
           @possible.push(b) if game.allowed? b
-          unless game.black.include?(@piece_type)
+          unless game.black.include?(piece_type)
             possible_up_down(game, b) if game.allowed? b
           end
         end
       end
+    end
+  end
+
+  def ek(piece_type, b, game, colour, func)
+    unless piece_type.nil?
+      if colour == 'white'
+      if !game.white.include?(piece_type) && @possible.none?(b)
+        @possible.push(b) if game.allowed? b
+        unless game.black.include?(piece_type)
+          func(game, b) if game.allowed? b
+        end
+      end
+      if colour == 'black'
+        if !game.black.include?(piece_type) && @possible.none?(b)
+          @possible.push(b) if game.allowed? b
+          unless game.white.include?(piece_type)
+            func(game, b) if game.allowed? b
+          end
+        end
     end
   end
 
@@ -73,10 +93,12 @@ class Rook
 end
 
 game = Chessboard.new
-alex = Rook.new(game, [6,3])
+alex = Rook.new(game, 'white', [6,3])
 p alex.place([5,5])
 james = Knight.new(game, [5,6])
 dav = Knight.new(game, [6,5])
+andy = Rook.new(game, 'white', [8,5])
+andrew = Rook.new(game, 'white', [5,8])
 game.print_board
 alex.move_piece([8,8])
 alex.rook_moves(game, [8,8])
@@ -84,5 +106,11 @@ alex.move_piece([5,6])
 game.print_board
 alex.move_piece([5,8])
 game.print_board
-
+dav.move_piece(game, [7,7])
+game.print_board
+dav.move_piece(game, [5,6])
+game.print_board
+dan = Knight.new(game, [3,5])
+dav.move_piece(game, [3,7])
+game.print_board
 ## NEED TO SORT OUT GETTING RID OF PIECES ONCE MOVED, AND MAKING BLACK AND WHITE SETS TO TELL APART FOR THE ALLOWABLE MOVES ARRAYS.
