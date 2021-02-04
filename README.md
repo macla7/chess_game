@@ -1,0 +1,1 @@
+Next thing to do is to add the pieces unicodes and possibly names(?) to a hash/array which can be called easily later.
