@@ -25,9 +25,26 @@ class Pawn < Piece
   end
 
   def move_piece(game, end_pos)
+    if @pos[1]+2 == end_pos[1]
+      game.board["#{@pos[0]}, #{@pos[1]+1}"] = 'e'
+    end
+    # IF END_POS IS E, DELETE BEFORE PIECE.
     super(game, end_pos)
     @move_counter += 1
   end
+
+  def leave_en_pas
+    
+  end
+
+# HAVE SOME KIND OF GLOBAL TURN COUNTER AND AN 'e' CHECKER.
+
+  def en_passant(game, end_pos, pos)
+    if game.board["#{@pos[0]+1}, #{@pos[1]}"] == game.black[:Pawn] && @colour == 'white'
+      if game.board["#{@pos[0]+1}, #{@pos[1]+1}"] == 'e'
+        @possible.push([@pos[0]+1, @pos[1]+1])
+      end
+    end
+  end
+
 end
-
-
