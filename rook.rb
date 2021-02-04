@@ -40,7 +40,7 @@ class Rook
     for i in [1, -1]
       piece_type = game.board["#{pos[0]+i}, #{pos[1]}"]
       b = [pos[0]+i, pos[1]]
-      ek(piece_type, b, game, @colour, possible_left_right(game, b))
+      ek(piece_type, b, game, @colour, method(:possible_left_right))
     end
   end
 
@@ -65,7 +65,7 @@ class Rook
         if !game.white.include?(piece_type) && @possible.none?(b)
           @possible.push(b) if game.allowed? b
           unless game.black.include?(piece_type)
-            func if game.allowed? b
+            func.call(game) if game.allowed? b
           end
         end
       end
@@ -73,7 +73,7 @@ class Rook
         if !game.black.include?(piece_type) && @possible.none?(b)
           @possible.push(b) if game.allowed? b
           unless game.white.include?(piece_type)
-            func if game.allowed? b
+            func.call(game) if game.allowed? b
           end
         end
       end
