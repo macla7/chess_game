@@ -54,17 +54,17 @@ class Rook
   def colour_check(piece_type, b, game, colour, func)
     unless piece_type.nil? || possible.include?(b)
       if colour == 'white'
-        if !game.white.include?(piece_type)
+        if !game.white.has_value?(piece_type)
           @possible.push(b) if game.allowed? b
-          unless game.black.include?(piece_type)
+          unless game.black.value?(piece_type)
             func.call(game, b) if game.allowed? b
           end
         end
       end
       if colour == 'black'
-        if !game.black.include?(piece_type)
+        if !game.black.has_value?(piece_type)
           @possible.push(b) if game.allowed? b
-          unless game.white.include?(piece_type)
+          unless game.white.value?(piece_type)
             func.call(game, b) if game.allowed? b
           end
         end

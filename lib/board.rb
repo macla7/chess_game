@@ -8,8 +8,23 @@ class Chessboard
         @board["#{i}, #{j}"] = ' '
       end
     end
-    @black = ["\u{265A}", "\u{265B}", "\u{265C}", "\u{265D}", "\u{265E}", "\u{265F}"]
-    @white = ["\u{2654}", "\u{2655}", "\u{2656}", "\u{2657}", "\u{2658}", "\u{265F9}"]
+    @white = {
+      Rook: "\u{2656}",
+      Knight: "\u{2658}",
+      Bishop: "\u{2657}",
+      King: "\u{2654}",
+      Queen: "\u{2655}",
+      Pawn: "\u{2659}"
+    }
+
+    @black = {
+      Rook: "\u{265C}",
+      Knight: "\u{265E}",
+      Bishop: "\u{265D}",
+      King: "\u{265A}",
+      Queen: "\u{265B}",
+      Pawn: "\u{265F}"
+    }  
   end
 
   def allowed?(move)

@@ -38,8 +38,8 @@ class Knight
     potential_pos.each do |pos|
       piece_type = game.board["#{pos[0]}, #{pos[1]}"]
       if game.allowed?(pos) 
-        @possible.push(pos) if !game.black.include?(piece_type) && @colour == 'black'
-        @possible.push(pos) if !game.white.include?(piece_type) && @colour == 'white'
+        @possible.push(pos) if !game.black.value?(piece_type) && @colour == 'black'
+        @possible.push(pos) if !game.white.value?(piece_type) && @colour == 'white'
       end
     end
     @possible
