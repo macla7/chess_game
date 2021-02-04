@@ -5,21 +5,12 @@ require './lib/pathing.rb'
 
 
 game = Chessboard.new
-alex = Rook.new(game, 'white', game.white[:Rook], [1,1])
-p alex.possible_moves(game)
-game.print_board
-alex.rook_moves(game, [1,5])
-andy = Rook.new(game, 'black', game.black[:Rook], [1,6])
-andrew = Rook.new(game, 'black', game.black[:Rook], [6,1])
-game.print_board
-alex.rook_moves(game, [6,8])
-alex.move_piece(game, [6,1])
-alex.move_piece(game, [6,8])
-game.print_board
-alex.move_piece(game, [5,8])
-angus = Knight.new(game, 'white', game.white[:Knight], [3,7])
-game.print_board
-angus.move_piece(game, [5,8])
-p angus.possible_moves(game)
-angus.move_piece(game, [1,6])
+wr1 = Rook.new(game, 'white', game.white[:Rook], [1,1])
+wr2 = Rook.new(game, 'white', game.white[:Rook], [8,1])
+br1 = Rook.new(game, 'black', game.black[:Rook], [1,8])
+br2 = Rook.new(game, 'black', game.black[:Rook], [8,8])
+wk1 = Rook.new(game, 'white', game.white[:Knight], [2,1])
+wk2 = Rook.new(game, 'white', game.white[:Knight], [7,1])
+bk1 = Rook.new(game, 'black', game.black[:Knight], [2,8])
+bk2 = Rook.new(game, 'black', game.black[:Knight], [7,8])
 game.print_board
