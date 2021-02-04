@@ -1,1 +1,1 @@
-Next thing to do is to add the pieces unicodes and possibly names(?) to a hash/array which can be called easily later.
+Need to finish rook, ump e son move, and the activation of final power at end of board.
