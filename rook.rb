@@ -4,11 +4,11 @@ require './new_knight.rb'
 # moves, incoporating possible moves using Chessboard.allowed?
 class Rook
   attr_reader :possible, :game, :pos
-  def initialize(game,  colour, pos = [1,1])
+  def initialize(game,  colour, symbol, pos = [1,1])
     @pos = pos
     @possible = []
     @game = game
-    game.board["#{pos[0]}, #{pos[1]}"] = "\u{2656}"
+    game.board["#{pos[0]}, #{pos[1]}"] = symbol
     @colour = colour
     name = 'WR1'
   end
@@ -40,7 +40,7 @@ class Rook
     for i in [1, -1]
       piece_type = game.board["#{pos[0]+i}, #{pos[1]}"]
       b = [pos[0]+i, pos[1]]
-      ek(piece_type, b, game, @colour, method(:possible_left_right))
+      colour_check(piece_type, b, game, @colour, method(:possible_left_right))
     end
   end
 
@@ -48,32 +48,25 @@ class Rook
     for i in [1, -1]
       piece_type = game.board["#{pos[0]}, #{pos[1]+i}"]
       b = [pos[0], pos[1]+i]
-      unless piece_type.nil?
-        if !game.white.include?(piece_type) && @possible.none?(b)
-          @possible.push(b) if game.allowed? b
-          unless game.black.include?(piece_type)
-            possible_up_down(game, b) if game.allowed? b
-          end
-        end
-      end
+      colour_check(piece_type, b, game, @colour, method(:possible_up_down))
     end
   end
 
-  def ek(piece_type, b, game, colour, func)
-    unless piece_type.nil?
+  def colour_check(piece_type, b, game, colour, func)
+    unless piece_type.nil? || possible.include?(b)
       if colour == 'white'
-        if !game.white.include?(piece_type) && @possible.none?(b)
+        if !game.white.include?(piece_type)
           @possible.push(b) if game.allowed? b
           unless game.black.include?(piece_type)
-            func.call(game) if game.allowed? b
+            func.call(game, b) if game.allowed? b
           end
         end
       end
       if colour == 'black'
-        if !game.black.include?(piece_type) && @possible.none?(b)
+        if !game.black.include?(piece_type)
           @possible.push(b) if game.allowed? b
           unless game.white.include?(piece_type)
-            func.call(game) if game.allowed? b
+            func.call(game, b) if game.allowed? b
           end
         end
       end
@@ -88,24 +81,14 @@ class Rook
 end
 
 game = Chessboard.new
-alex = Rook.new(game, 'white', [6,3])
-p alex.place([5,5])
-james = Knight.new(game, [5,6])
-dav = Knight.new(game, [6,5])
-andy = Rook.new(game, 'white', [8,5])
-andrew = Rook.new(game, 'white', [5,8])
+alex = Rook.new(game, 'white', "\u{2656}", [1,1])
+p alex.possible_moves(game)
 game.print_board
-alex.move_piece([8,8])
-alex.rook_moves(game, [8,8])
-alex.move_piece([5,6])
+alex.rook_moves(game, [1,5])
+andy = Rook.new(game, 'black', "\u{265C}", [1,6])
+andrew = Rook.new(game, 'black', "\u{265C}", [6,1])
 game.print_board
-alex.move_piece([5,8])
+alex.rook_moves(game, [6,8])
+alex.move_piece([6,1])
+alex.move_piece([6,8])
 game.print_board
-dav.move_piece(game, [7,7])
-game.print_board
-dav.move_piece(game, [5,6])
-game.print_board
-dan = Knight.new(game, [3,5])
-dav.move_piece(game, [3,7])
-game.print_board
-## NEED TO SORT OUT WORKING DIFFERENT COLOURS FOR ROOK AND KNIGHT
