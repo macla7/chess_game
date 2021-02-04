@@ -1,4 +1,3 @@
-require './board.rb'
 # def a pos
 # moves, incoporating possible moves using Chessboard.allowed?
 # knight_moves using path_to from Path
