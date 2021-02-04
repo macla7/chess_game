@@ -8,6 +8,7 @@ class Rook
     @pos = pos
     @possible = []
     @game = game
+    @symbol = symbol
     game.board["#{pos[0]}, #{pos[1]}"] = symbol
     @colour = colour
     name = 'WR1'
@@ -24,7 +25,7 @@ class Rook
 
   def place(end_pos)
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
-    game.board["#{end_pos[0]}, #{end_pos[1]}"] = "\u{2656}"
+    game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @pos = end_pos
   end
 
@@ -91,4 +92,10 @@ game.print_board
 alex.rook_moves(game, [6,8])
 alex.move_piece([6,1])
 alex.move_piece([6,8])
+game.print_board
+alex.move_piece([5,8])
+angus = Knight.new(game, 'white', "\u{2658}", [3,7])
+game.print_board
+angus.move_piece(game, [5,8])
+angus.move_piece(game, [1,6])
 game.print_board

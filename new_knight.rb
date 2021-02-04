@@ -4,11 +4,14 @@ require './board.rb'
 # knight_moves using path_to from Path
 class Knight
   attr_reader :pos
-  def initialize(game, pos = [1,1])
+  def initialize(game,  colour, symbol, pos = [1,1])
     @pos = pos
-    @game = game
     @possible = []
-    game.board["#{pos[0]}, #{pos[1]}"] = "\u{265E}"
+    @game = game
+    @symbol = symbol
+    game.board["#{pos[0]}, #{pos[1]}"] = symbol
+    @colour = colour
+    name = 'WK1'
   end
 
   def move_piece(game, end_pos)
@@ -22,7 +25,7 @@ class Knight
 
   def place(game, end_pos)
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
-    game.board["#{end_pos[0]}, #{end_pos[1]}"] = "\u{265E}"
+    game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @pos = end_pos
   end
 
@@ -35,8 +38,9 @@ class Knight
     end
     potential_pos.each do |pos|
       piece_type = game.board["#{pos[0]}, #{pos[1]}"]
-      if game.allowed?(pos) && !game.black.include?(piece_type)
-        @possible.push(pos)
+      if game.allowed?(pos) 
+        @possible.push(pos) if !game.black.include?(piece_type) && @colour == 'black'
+        @possible.push(pos) if !game.white.include?(piece_type) && @colour == 'white'
       end
     end
     @possible
