@@ -1,4 +1,3 @@
-# Make proper grid, and self.allowed?(move)
 class Chessboard
   attr_accessor :board, :black, :white
   def initialize

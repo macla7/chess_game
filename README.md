@@ -1,3 +1,3 @@
 Rook now all but done except for promotions. Will do later.
 
-Now unto the bishops.
+Put the gameplay functions in a module or something.
