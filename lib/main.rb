@@ -38,6 +38,6 @@ bb1 = Bishop.new(game, 'black', game.black[:Bishop], [3,8])
 bb2 = Bishop.new(game, 'black', game.black[:Bishop], [6,8])
 wq = Queen.new(game, 'white', game.white[:Queen], [4,1])
 bq = Queen.new(game, 'black', game.black[:Queen], [5,8])
-wk = King.new(game, 'white', game.white[:King], [4,6])
-p wk.possible_moves(game)
+wk = King.new(game, 'white', game.white[:King], [5,1])
+bk = King.new(game, 'black', game.black[:King], [4,8])
 game.print_board
