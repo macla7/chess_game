@@ -38,7 +38,7 @@ class Chessboard
     8.downto(1) do |j|
       print '|'
       for i in 1..8
-        print " #{@board["#{i}, #{j}"]} |"
+        print " #{@board["#{i}, #{j}"]} |" unless @board["#{i}, #{j}"] == 'e'
       end
       puts "\n"
     end

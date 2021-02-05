@@ -29,7 +29,10 @@ bp5 = Pawn.new(game, 'black', game.black[:Pawn], [5,7])
 bp6 = Pawn.new(game, 'black', game.black[:Pawn], [6,7])
 bp7 = Pawn.new(game, 'black', game.black[:Pawn], [7,7])
 bp8 = Pawn.new(game, 'black', game.black[:Pawn], [8,7])
+bp3.move_piece(game, [3,5])
+bp3.move_piece(game, [3,4])
 wp2.move_piece(game, [2,4])
-wp5.move_piece(game, [5,4])
-p game.board["2, 3"]
+game.print_board
+p bp3.possible_moves(game)
+bp3.move_piece(game, [2,3])
 game.print_board

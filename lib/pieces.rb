@@ -33,6 +33,7 @@ class Piece
   end
 
   def place(game, end_pos)
+    @last_killed = game.board["#{end_pos[0]}, #{end_pos[1]}"]
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @pos = end_pos
