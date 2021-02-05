@@ -7,14 +7,28 @@ class Piece
     @symbol = symbol
     game.board["#{pos[0]}, #{pos[1]}"] = symbol
     @colour = colour
+    @turn_counter = 0
+    @last_enpassant = 0
   end
 
   def move_piece(game, end_pos)
     possible_moves(game)
     if @possible.include?(end_pos)
       place(game, end_pos)
+      wip_es(game)
+      @turn_counter += 1
     else
       puts "Can't move to #{end_pos}, sorry!"
+    end
+  end
+
+  def wip_es(game)
+    for i in 1..8
+      for j in 1..8
+        if game.board["#{i}, #{j}"] == 'e'
+          game.board["#{i}, #{j}"] = ' '
+        end
+      end
     end
   end
 
