@@ -1,1 +1,3 @@
-Need to finish rook, ump e son move, and the activation of final power at end of board.
+Rook now all but done except for promotions. Will do later.
+
+Now unto the bishops.

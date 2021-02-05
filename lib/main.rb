@@ -3,6 +3,7 @@ require './lib/new_knight.rb'
 require './lib/rook.rb'
 require './lib/pathing.rb'
 require './lib/pawn.rb'
+require './lib/bishop.rb'
 
 game = Chessboard.new
 wr1 = Rook.new(game, 'white', game.white[:Rook], [1,1])
@@ -29,10 +30,8 @@ bp5 = Pawn.new(game, 'black', game.black[:Pawn], [5,7])
 bp6 = Pawn.new(game, 'black', game.black[:Pawn], [6,7])
 bp7 = Pawn.new(game, 'black', game.black[:Pawn], [7,7])
 bp8 = Pawn.new(game, 'black', game.black[:Pawn], [8,7])
-bp3.move_piece(game, [3,5])
-bp3.move_piece(game, [3,4])
-wp2.move_piece(game, [2,4])
-game.print_board
-p bp3.possible_moves(game)
-bp3.move_piece(game, [2,3])
+wb1 = Bishop.new(game, 'white', game.white[:Bishop], [3,1])
+wb2 = Bishop.new(game, 'white', game.white[:Bishop], [6,1])
+bb1 = Bishop.new(game, 'black', game.black[:Bishop], [3,8])
+bb2 = Bishop.new(game, 'black', game.black[:Bishop], [6,8])
 game.print_board
