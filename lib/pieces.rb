@@ -9,6 +9,7 @@ class Piece
     @colour = colour
     @turn_counter = 0
     @last_enpassant = 0
+    @check = false
   end
 
   def move_piece(game, end_pos)

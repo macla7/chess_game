@@ -38,6 +38,7 @@ class Chessboard
       print '|'
       for i in 1..8
         print " #{@board["#{i}, #{j}"]} |" unless @board["#{i}, #{j}"] == 'e'
+        print '   |' if @board["#{i}, #{j}"] == 'e'
       end
       puts "\n"
     end
