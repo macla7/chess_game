@@ -7,7 +7,7 @@ class Pawn < Piece
     @move_counter = 0
   end
 
-  def possible_moves(game, pos = @pos)
+  def possible_moves(game, troops, pos = @pos)
     @j = 1 if @colour == 'white'
     @j = -1 if @colour == 'black'
     potential_shifts = [[0, @j]]
@@ -28,10 +28,10 @@ class Pawn < Piece
     @possible
   end
 
-  def move_piece(game, end_pos)
+  def move_piece(game, troops, end_pos)
     # order is super important here.
     @old_pos = @pos
-    super(game, end_pos)
+    super(game, troops, end_pos)
 
     if @old_pos[1]+(@j*2) == end_pos[1]
       game.board["#{@old_pos[0]}, #{@old_pos[1]+@j}"] = 'e'

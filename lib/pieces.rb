@@ -13,8 +13,8 @@ class Piece
     @last_spot = ''
   end
 
-  def move_piece(game, end_pos)
-    possible_moves(game)
+  def move_piece(game, troops, end_pos)
+    possible_moves(game, troops)
     if @possible.include?(end_pos)
       place(game, end_pos)
       wip_es(game)
@@ -22,7 +22,7 @@ class Piece
     else
       puts "Can't move to #{end_pos}, sorry!"
     end
-    @checked = check(game, end_pos)
+    @checked = check(game, troops, end_pos)
   end
 
   def wip_es(game)
@@ -49,18 +49,27 @@ class Piece
     @pos = end_pos
   end
 
-  def moves(game, end_pos)
+  def moves(game, end_pos, troops)
     the_way = Path.new(@pos)
-    the_way.path_to(game, end_pos, self)
+    the_way.path_to(game, end_pos, self, troops)
     the_way.found_it
   end
 
-  def check(game, pos)
-    possible_moves(game, pos)
+  def check(game, troops, pos)
+    possible_moves(game, troops, pos)
     @possible.each do |pos|
       piece_type = game.board["#{pos[0]}, #{pos[1]}"]
       return 'black' if piece_type == game.black[:King] && @colour == 'white'
       return 'white' if piece_type == game.white[:King] && @colour == 'black'
+    end
+    false
+  end
+
+  def ability_to_check(game, troops, pos, end_pos)
+    possible_moves(game, troops, pos)
+    @possible.each do |post|
+      return 'black' if post == end_pos && @colour == 'white'
+      return 'white' if post == end_pos && @colour == 'black'
     end
     false
   end

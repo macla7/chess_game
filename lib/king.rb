@@ -1,11 +1,12 @@
 require './lib/pieces.rb'
+require './lib/troops.rb'
 
 class King < Piece
-  def possible_moves(game, pos = @pos)
+  def possible_moves(game, troops, pos = @pos)
     @possible = []
     potential_pos(game, pos).each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
-      if game.allowed?(post) && !neighbour_king(game, post)
+      if game.allowed?(post)# && !cant_move_into_check(game, troops, post, @colour)
         @possible.push(post) if !game.black.value?(piece_type) && @colour == 'black'
         @possible.push(post) if !game.white.value?(piece_type) && @colour == 'white'
       end
@@ -18,6 +19,14 @@ class King < Piece
       piece_type = game.board["#{pos[0]}, #{pos[1]}"]
       return true if piece_type == game.black[:King] && @colour == 'white'
       return true if piece_type == game.white[:King] && @colour == 'black'
+    end
+    false
+  end
+
+  def cant_move_into_check(game, troops, end_pos, colour)
+    troops.each do |key, value|
+      #p key
+      p 'checked' if value.ability_to_check(game, troops, value.pos, end_pos) == colour
     end
     false
   end

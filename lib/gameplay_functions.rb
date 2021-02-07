@@ -28,7 +28,9 @@ def touch_piece(game, troops, colour)
       help
     else
       if troops.key?(piece) && piece.match(/^#{colour}/)
-        if troops[piece].possible_moves(game).empty?
+        p troops[piece].pos
+        # THINK THE ISSUE IS HAPPENING HERE SOMEHOW...
+        if troops[piece].possible_moves(game, troops).empty?
           print "\n  This piece can't move."
         else
           return piece
@@ -45,7 +47,7 @@ def pick_move(troops, piece, game)
   possible_y = []
   across = ''
   up = ''
-  troops[piece].possible_moves(game).each do |move|
+  troops[piece].possible_moves(game, troops).each do |move|
     puts "\t#{convert_number(move[0])} - #{move[1]}"
     possible_x.push(move[0])
     possible_y.push(move[1])
@@ -70,7 +72,7 @@ def pick_move(troops, piece, game)
   end
   return 'back' if up == 'back'
 
-  return [across, up] if troops[piece].possible_moves(game).include?([across, up])
+  return [across, up] if troops[piece].possible_moves(game, troops).include?([across, up])
 end
 
 def convert_letter(letter)
@@ -107,7 +109,7 @@ def turn(troops, game, colour)
     piece = touch_piece(game, troops, colour)
     move = pick_move(troops, piece, game)
   end
-  troops[piece].move_piece(game, move)
+  troops[piece].move_piece(game, troops, move)
   game.print_board
   troops[piece]
 end
@@ -117,7 +119,7 @@ def check_sequence(troops, game, colour, checker, old_pos)
   #if not, make a move
   loop do
     last_piece = turn(troops, game, colour)
-    if !checker.check(game, checker.pos)
+    if !checker.check(game, troops, checker.pos)
       break
     else
       p last_piece.last_spot

@@ -1,7 +1,7 @@
 require './lib/pieces.rb'
 
 class Rook < Piece
-  def possible_moves(game, pos = @pos)
+  def possible_moves(game, troops, pos = @pos)
     @possible = []
     possible_left_right(game, pos)
     possible_up_down(game, pos)
