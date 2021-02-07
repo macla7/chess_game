@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos
+  attr_reader :possible, :game, :pos, :checked, :last_spot
   def initialize(game, colour, symbol, pos = [1,1])
     @pos = pos
     @possible = []
@@ -9,7 +9,8 @@ class Piece
     @colour = colour
     @turn_counter = 0
     @last_enpassant = 0
-    @check = false
+    @checked = false
+    @last_spot = ''
   end
 
   def move_piece(game, end_pos)
@@ -21,6 +22,7 @@ class Piece
     else
       puts "Can't move to #{end_pos}, sorry!"
     end
+    @checked = check(game, end_pos)
   end
 
   def wip_es(game)
@@ -35,14 +37,31 @@ class Piece
 
   def place(game, end_pos)
     @last_killed = game.board["#{end_pos[0]}, #{end_pos[1]}"]
+    @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @pos = end_pos
   end
 
-  def moves(board, end_pos)
+  def reverse_place(game, end_pos)
+    game.board["#{pos[0]}, #{pos[1]}"] = ' '
+    game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
+    @pos = end_pos
+  end
+
+  def moves(game, end_pos)
     the_way = Path.new(@pos)
-    the_way.path_to(board, end_pos, self)
+    the_way.path_to(game, end_pos, self)
     the_way.found_it
+  end
+
+  def check(game, pos)
+    possible_moves(game, pos)
+    @possible.each do |pos|
+      piece_type = game.board["#{pos[0]}, #{pos[1]}"]
+      return 'black' if piece_type == game.black[:King] && @colour == 'white'
+      return 'white' if piece_type == game.white[:King] && @colour == 'black'
+    end
+    false
   end
 end

@@ -101,7 +101,7 @@ def convert_number(number)
 end
 
 def turn(troops, game, colour)
-  piece = ''
+  piece = ' '
   move = 'back'
   while move == 'back'
     piece = touch_piece(game, troops, colour)
@@ -109,4 +109,21 @@ def turn(troops, game, colour)
   end
   troops[piece].move_piece(game, move)
   game.print_board
+  troops[piece]
 end
+
+def check_sequence(troops, game, colour, checker, old_pos)
+  # enumerable, check mate?
+  #if not, make a move
+  loop do
+    last_piece = turn(troops, game, colour)
+    if !checker.check(game, checker.pos)
+      break
+    else
+      p last_piece.last_spot
+      last_piece.reverse_place(game, last_piece.last_spot)
+      game.print_board
+    end
+  end
+end
+

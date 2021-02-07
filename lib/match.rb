@@ -40,7 +40,7 @@ troops = {
 'bb2' => Bishop.new(game, 'black', game.black[:Bishop], [6,8]),
 'wq' => Queen.new(game, 'white', game.white[:Queen], [4,1]),
 'bq' => Queen.new(game, 'black', game.black[:Queen], [5,8]),
-'bk' => King.new(game, 'black', game.black[:King], [4,8]),
+'bk' => King.new(game, 'black', game.black[:King], [4,4]),
 'wk' => King.new(game, 'white', game.white[:King], [5,1])
 }
 
@@ -49,9 +49,17 @@ introduction
 help
 
 loop do
-  puts "  WHITE'S TURN!\n"
-  turn(troops, game, 'w')
-  puts "  BLACK's TURN!\n"
-  turn(troops, game, 'b')
+  loop do
+    puts "  WHITE'S TURN!\n"
+    piece = turn(troops, game, 'w')
+    break if piece.checked == false
+    check_sequence(troops, game, 'b', piece, @pos)
+  end
+  loop do
+    puts "  BLACK's TURN!\n"
+    piece = turn(troops, game, 'b')
+    break if piece.checked == false
+    check_sequence(troops, game, 'w', piece, @pos)
+  end
   # break if checkmate
 end
