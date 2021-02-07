@@ -42,5 +42,6 @@ class Chessboard
       end
       puts "\n"
     end
+    print "\n"
   end
 end

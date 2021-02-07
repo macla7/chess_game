@@ -49,6 +49,9 @@ introduction
 help
 
 loop do
-  turn(troops, game)
+  puts "  WHITE'S TURN!\n"
+  turn(troops, game, 'w')
+  puts "  BLACK's TURN!\n"
+  turn(troops, game, 'b')
   # break if checkmate
 end

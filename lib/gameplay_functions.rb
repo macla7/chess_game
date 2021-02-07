@@ -19,25 +19,58 @@ def help
   with a comma inbetween.\n\n"
 end
 
-def touch_piece
-  print "  Please pick the piece you'd like to move.\n\n  "
-  piece = gets.chomp
-  if piece == 'help'
-    help
-    return false
-  else
-    piece
+def touch_piece(game, troops, colour)
+  print "\n  Please pick the piece you'd like to move.\n"
+  loop do
+    print "\nPiece: "
+    piece = gets.chomp
+    if piece == 'help'
+      help
+    else
+      if troops.key?(piece) && piece.match(/^#{colour}/)
+        if troops[piece].possible_moves(game).empty?
+          print "\n  This piece can't move."
+        else
+          return piece
+        end
+      end
+      print "\n  Type 'help' if you're battling.\n"
+    end
   end
 end
 
 def pick_move(troops, piece, game)
   print "\n\n  Please pick from the following moves..\n\n"
-  troops[piece].possible_moves(game).each {|move| puts "\t#{convert_number(move[0])} - #{move[1]}"}
-  print "\nLetter: "
-  across = convert_letter(gets.chomp)
-  print "Number: "
-  up = gets.chomp.to_i
-  [across, up] if troops[piece].possible_moves(game).include?([across, up])
+  possible_x = []
+  possible_y = []
+  across = ''
+  up = ''
+  troops[piece].possible_moves(game).each do |move|
+    puts "\t#{convert_number(move[0])} - #{move[1]}"
+    possible_x.push(move[0])
+    possible_y.push(move[1])
+  end
+  loop do
+    print "\nLetter: "
+    across = gets.chomp
+    across && break if across == 'back'
+
+    across = convert_letter(across)
+    across && break if possible_x.include?(across)
+  end
+  return 'back' if across == 'back'
+
+  loop do
+    print "Number: "
+    up = gets.chomp
+    up && break if up == 'back'
+
+    up = up.to_i
+    up.to_i && break if possible_y.include?(up.to_i)
+  end
+  return 'back' if up == 'back'
+
+  return [across, up] if troops[piece].possible_moves(game).include?([across, up])
 end
 
 def convert_letter(letter)
@@ -50,6 +83,7 @@ def convert_letter(letter)
   when 'f' then 6
   when 'g' then 7
   when 'h' then 8
+  when 'back' then 'back'
   end
 end
 
@@ -66,10 +100,13 @@ def convert_number(number)
   end
 end
 
-def turn(troops, game)
-  piece = touch_piece
-  return unless piece
-  move = pick_move(troops, piece, game)
+def turn(troops, game, colour)
+  piece = ''
+  move = 'back'
+  while move == 'back'
+    piece = touch_piece(game, troops, colour)
+    move = pick_move(troops, piece, game)
+  end
   troops[piece].move_piece(game, move)
   game.print_board
 end
