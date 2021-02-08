@@ -35,7 +35,7 @@ troops = {
   'wq' => Queen.new(game, 'white', game.white[:Queen], [4,1]),
   'bq' => Queen.new(game, 'black', game.black[:Queen], [5,8]),
   'bk' => King.new(game, 'black', game.black[:King], [4,4]),
-  'wk' => King.new(game, 'white', game.white[:King], [5,1])
+  'wk' => King.new(game, 'white', game.white[:King], [6,4])
   }
 
 game.print_board

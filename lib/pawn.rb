@@ -4,7 +4,6 @@ class Pawn < Piece
   attr_reader :last_killed
   def initialize(game, colour, symbol, pos)
     super(game, colour, symbol, pos)
-    @move_counter = 0
     @pawn = true
     @j = 1 if @colour == 'white'
     @j = -1 if @colour == 'black'

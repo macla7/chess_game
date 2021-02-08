@@ -12,6 +12,7 @@ class Piece
     @checked = false
     @last_spot = ''
     @pawn = false
+    @move_counter = 0
   end
 
   def move_piece(game, troops, end_pos)
@@ -41,11 +42,14 @@ class Piece
     @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
+    @pos = end_pos
   end
 
   def reverse_place(game, end_pos)
-    game.board["#{@last_spot[0]}, #{@last_spot[1]}"] = @last_killed
-    game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
+    @pos = last_spot
+    game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
+    game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
+    @move_counter = 0 if @move_counter.positive?
   end
 
   def moves(game, end_pos, troops)

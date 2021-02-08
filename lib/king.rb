@@ -6,14 +6,11 @@ class King < Piece
     @possible = []
     potential_pos(game, pos).each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
-      #p "This is the kings move to spot #{post}!"
-      p !cant_move_into_check(game, troops, post)
-      if game.allowed?(post) && !cant_move_into_check(game, troops, post)
+      if game.allowed?(post) && !cant_move_into_check(game, troops, post) && !neighbour_king(game, post)
         @possible.push(post) if !game.black.value?(piece_type) && @colour == 'black'
         @possible.push(post) if !game.white.value?(piece_type) && @colour == 'white'
       end
     end
-    p @possible
     @possible
   end
 
@@ -31,10 +28,13 @@ class King < Piece
     troops.each do |key, value|
       # p key
       if key != 'wk' && key != 'bk'
-        return true && reverse_place(game, @pos) if value.ability_to_check(game, troops, end_pos) == @colour
+        if value.ability_to_check(game, troops, end_pos) == @colour
+          reverse_place(game, end_pos)
+          return true
+        end
       end
     end
-    reverse_place(game, @pos)
+    reverse_place(game, end_pos)
     false
   end
 

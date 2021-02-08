@@ -121,7 +121,7 @@ def check_sequence(troops, game, colour, checker, old_pos)
     if !checker.check(game, troops, checker.pos)
       break
     else
-      last_piece.reverse_place(game, last_piece.last_spot)
+      last_piece.reverse_place(game, last_piece.pos)
       game.print_board
     end
   end
