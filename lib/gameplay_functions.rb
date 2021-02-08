@@ -114,8 +114,9 @@ def turn(troops, game, colour)
 end
 
 def check_sequence(troops, game, colour, checker, old_pos)
-  # enumerable, check mate?
-  #if not, make a move
+  if game.check_mate?(game, troops, colour, checker)
+    return 'check mate'
+  end
   loop do
     last_piece = turn(troops, game, colour)
     if !checker.check(game, troops, checker.pos)

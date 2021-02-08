@@ -58,7 +58,7 @@ class Piece
     the_way.found_it
   end
 
-  def check(game, troops, pos)
+  def check(game, troops, pos = @pos)
     possible_moves(game, troops, pos)
     @possible.each do |pos|
       piece_type = game.board["#{pos[0]}, #{pos[1]}"]

@@ -44,4 +44,18 @@ class Chessboard
     end
     print "\n"
   end
+
+  def check_mate?(game, troops, colour, checker)
+    check_mate = ''
+    troops.each do |key, value|
+      if key.match(/^b/)
+        value.possible_moves(game, troops).each do |post|
+          value.place(game, post)
+          check_mate = false if !checker.check(game, troops)
+          value.reverse_place(game, post)
+        end
+      end
+    end
+    check_mate
+  end
 end

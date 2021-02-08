@@ -24,9 +24,9 @@ class King < Piece
   end
 
   def cant_move_into_check(game, troops, end_pos)
+    # inefficient, but because of pawns essentially HAVE to, move the king and test all possible moves again..
     place(game, end_pos)
     troops.each do |key, value|
-      # p key
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, troops, end_pos) == @colour
           reverse_place(game, end_pos)

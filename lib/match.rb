@@ -4,8 +4,8 @@ require './lib/troops.rb'
 
 game = Chessboard.new
 troops = {
-  'wr1' => Rook.new(game, 'white', game.white[:Rook], [1,1]),
-  'wr2' => Rook.new(game, 'white', game.white[:Rook], [8,1]),
+  'wr1' => Rook.new(game, 'white', game.white[:Rook], [8,5]),
+  'wr2' => Rook.new(game, 'white', game.white[:Rook], [8,3]),
   'br1' => Rook.new(game, 'black', game.black[:Rook], [1,8]),
   'br2' => Rook.new(game, 'black', game.black[:Rook], [8,8]),
   'wk1' => Knight.new(game, 'white', game.white[:Knight], [2,1]),
@@ -25,7 +25,7 @@ troops = {
   'bp3' => Pawn.new(game, 'black', game.black[:Pawn], [3,7]),
   'bp4' => Pawn.new(game, 'black', game.black[:Pawn], [4,7]),
   'bp5' => Pawn.new(game, 'black', game.black[:Pawn], [5,7]),
-  'bp6' => Pawn.new(game, 'black', game.black[:Pawn], [6,7]),
+  'bp6' => Pawn.new(game, 'black', game.black[:Pawn], [6,4]),
   'bp7' => Pawn.new(game, 'black', game.black[:Pawn], [7,7]),
   'bp8' => Pawn.new(game, 'black', game.black[:Pawn], [8,7]),
   'wb1' => Bishop.new(game, 'white', game.white[:Bishop], [3,1]),
@@ -35,25 +35,37 @@ troops = {
   'wq' => Queen.new(game, 'white', game.white[:Queen], [4,1]),
   'bq' => Queen.new(game, 'black', game.black[:Queen], [5,8]),
   'bk' => King.new(game, 'black', game.black[:King], [4,4]),
-  'wk' => King.new(game, 'white', game.white[:King], [6,4])
+  'wk' => King.new(game, 'white', game.white[:King], [5,1])
   }
 
 game.print_board
 introduction
 help
+game_over = false
 
 loop do
-  loop do
-    puts "  WHITE'S TURN!\n"
-    piece = turn(troops, game, 'white')
-    break if piece.checked == false
-    check_sequence(troops, game, 'black', piece, @pos)
+  unless game_over
+    loop do
+      puts "  WHITE'S TURN!\n"
+      piece = turn(troops, game, 'white')
+      break if piece.checked == false
+      if check_sequence(troops, game, 'black', piece, @pos) == 'check mate'
+        p 'White wins!'
+        game_over = true
+        break
+      end
+    end
   end
-  loop do
-    puts "  BLACK's TURN!\n"
-    piece = turn(troops, game, 'black')
-    break if piece.checked == false
-    check_sequence(troops, game, 'white', piece, @pos)
+  unless game_over
+    loop do
+      puts "  BLACK's TURN!\n"
+      piece = turn(troops, game, 'black')
+      break if piece.checked == false
+      if check_sequence(troops, game, 'white', piece, @pos) == 'check mate'
+        p 'Black wins!'
+        break
+      end
+    end
   end
-  # break if checkmate
+  break if game_over
 end
