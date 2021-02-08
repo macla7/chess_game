@@ -3,10 +3,6 @@ require './lib/board.rb'
 require './lib/troops.rb'
 
 game = Chessboard.new
-game.print_board
-introduction
-help
-
 troops = {
   'wr1' => Rook.new(game, 'white', game.white[:Rook], [1,1]),
   'wr2' => Rook.new(game, 'white', game.white[:Rook], [8,1]),
@@ -42,18 +38,22 @@ troops = {
   'wk' => King.new(game, 'white', game.white[:King], [5,1])
   }
 
+game.print_board
+introduction
+help
+
 loop do
   loop do
     puts "  WHITE'S TURN!\n"
-    piece = turn(troops, game, 'w')
+    piece = turn(troops, game, 'white')
     break if piece.checked == false
-    check_sequence(troops, game, 'b', piece, @pos)
+    check_sequence(troops, game, 'black', piece, @pos)
   end
   loop do
     puts "  BLACK's TURN!\n"
-    piece = turn(troops, game, 'b')
+    piece = turn(troops, game, 'black')
     break if piece.checked == false
-    check_sequence(troops, game, 'w', piece, @pos)
+    check_sequence(troops, game, 'white', piece, @pos)
   end
   # break if checkmate
 end

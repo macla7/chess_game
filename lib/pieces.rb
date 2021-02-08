@@ -11,6 +11,7 @@ class Piece
     @last_enpassant = 0
     @checked = false
     @last_spot = ''
+    @pawn = false
   end
 
   def move_piece(game, troops, end_pos)
@@ -40,13 +41,11 @@ class Piece
     @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
-    @pos = end_pos
   end
 
   def reverse_place(game, end_pos)
-    game.board["#{pos[0]}, #{pos[1]}"] = ' '
+    game.board["#{@last_spot[0]}, #{@last_spot[1]}"] = @last_killed
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
-    @pos = end_pos
   end
 
   def moves(game, end_pos, troops)
@@ -65,8 +64,9 @@ class Piece
     false
   end
 
-  def ability_to_check(game, troops, pos, end_pos)
-    possible_moves(game, troops, pos)
+  def ability_to_check(game, troops, end_pos)
+    @pawn ? pawn_attack(game, troops, @pos) : possible_moves(game, troops)
+    # p @possible
     @possible.each do |post|
       return 'black' if post == end_pos && @colour == 'white'
       return 'white' if post == end_pos && @colour == 'black'

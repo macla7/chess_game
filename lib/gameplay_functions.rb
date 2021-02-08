@@ -27,8 +27,7 @@ def touch_piece(game, troops, colour)
     if piece == 'help'
       help
     else
-      if troops.key?(piece) && piece.match(/^#{colour}/)
-        p troops[piece].pos
+      if troops.key?(piece) && piece.match(/^#{colour[0]}/)
         # THINK THE ISSUE IS HAPPENING HERE SOMEHOW...
         if troops[piece].possible_moves(game, troops).empty?
           print "\n  This piece can't move."
@@ -47,7 +46,7 @@ def pick_move(troops, piece, game)
   possible_y = []
   across = ''
   up = ''
-  troops[piece].possible_moves(game, troops).each do |move|
+  troops[piece].possible.each do |move|
     puts "\t#{convert_number(move[0])} - #{move[1]}"
     possible_x.push(move[0])
     possible_y.push(move[1])
@@ -122,7 +121,6 @@ def check_sequence(troops, game, colour, checker, old_pos)
     if !checker.check(game, troops, checker.pos)
       break
     else
-      p last_piece.last_spot
       last_piece.reverse_place(game, last_piece.last_spot)
       game.print_board
     end

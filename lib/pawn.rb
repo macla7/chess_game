@@ -5,13 +5,18 @@ class Pawn < Piece
   def initialize(game, colour, symbol, pos)
     super(game, colour, symbol, pos)
     @move_counter = 0
+    @pawn = true
+    @j = 1 if @colour == 'white'
+    @j = -1 if @colour == 'black'
   end
 
   def possible_moves(game, troops, pos = @pos)
-    @j = 1 if @colour == 'white'
-    @j = -1 if @colour == 'black'
     potential_shifts = [[0, @j]]
     potential_shifts.push([0,2*@j]) if @move_counter.zero?
+    pawn_attack(game, troops, pos, potential_shifts)
+  end
+
+  def pawn_attack(game, troops, pos, potential_shifts = [])
     for i in [-1, 1]
       piece_type = game.board["#{@pos[0]+i}, #{@pos[1]+@j}"]
       b = [i, @j]
@@ -24,6 +29,7 @@ class Pawn < Piece
     potential_shifts.each do |shift|
       possible.push([pos[0] + shift[0], pos[1] + shift[1]])
     end
+    # MOVE THIS TO JUST FOR PAWNS.. i think
     en_passant(game, pos)
     @possible
   end
