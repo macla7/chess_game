@@ -10,8 +10,9 @@ class Pawn < Piece
   end
 
   def possible_moves(game, troops, pos = @pos)
-    potential_shifts = [[0, @j]]
-    potential_shifts.push([0,2*@j]) if @move_counter.zero?
+    potential_shifts = [[0, @j]] 
+    piece_type = game.board["#{@pos[0]}, #{@pos[1] + (2 * @j)}"]
+    potential_shifts.push([0,2*@j]) if @move_counter.zero? && piece_type == ' '
     pawn_attack(game, troops, pos, potential_shifts)
   end
 

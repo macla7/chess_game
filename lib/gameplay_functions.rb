@@ -52,6 +52,7 @@ def pick_move(troops, piece, game)
     possible_y.push(move[1])
   end
   loop do
+    troops[piece].possible_movements(game, troops)
     print "\nLetter: "
     across = gets.chomp
     across && break if across == 'back'

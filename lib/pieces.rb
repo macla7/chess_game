@@ -13,6 +13,28 @@ class Piece
     @last_spot = ''
     @pawn = false
     @move_counter = 0
+    @enemy = 'black' if @colour == 'white'
+    @enemy = 'white' if @colour == 'black'
+  end
+
+  def possible_movements(game, troops)
+    possible_moves(game, troops)
+    safe_moves = []
+    @are_we_in_check = false
+    p @possible
+    @possible.each do |post|
+      place(game, post)
+      troops.each do |key, value|
+        unless key == 'bk'
+          @are_we_in_check = true if value.check(game, troops, value.pos, @enemy) == @colour
+        end
+        reverse_place(game, post)
+      end
+      p @are_we_in_check
+      safe_moves.push(post) if !@are_we_in_check
+      @are_we_in_check = false
+    end
+    p safe_moves
   end
 
   def move_piece(game, troops, end_pos)
@@ -58,22 +80,25 @@ class Piece
     the_way.found_it
   end
 
-  def check(game, troops, pos = @pos)
+  def check(game, troops, pos = @pos, colour = @colour)
     possible_moves(game, troops, pos)
-    @possible.each do |pos|
-      piece_type = game.board["#{pos[0]}, #{pos[1]}"]
-      return 'black' if piece_type == game.black[:King] && @colour == 'white'
-      return 'white' if piece_type == game.white[:King] && @colour == 'black'
+    @possible.each do |post|
+      piece_type = game.board["#{post[0]}, #{post[1]}"]
+      if piece_type == game.black[:King] && colour == 'white'
+        p @symbol 
+        return 'black'
+      end
+      return 'white' if piece_type == game.white[:King] && colour == 'black'
     end
     false
   end
 
-  def ability_to_check(game, troops, end_pos)
+  def ability_to_check(game, troops, end_pos, colour)
     @pawn ? pawn_attack(game, troops, @pos) : possible_moves(game, troops)
-    # p @possible
+
     @possible.each do |post|
-      return 'black' if post == end_pos && @colour == 'white'
-      return 'white' if post == end_pos && @colour == 'black'
+      return 'black' if post == end_pos && colour == 'white'
+      return 'white' if post == end_pos && colour == 'black'
     end
     false
   end

@@ -28,7 +28,7 @@ class King < Piece
     place(game, end_pos)
     troops.each do |key, value|
       if key != 'wk' && key != 'bk'
-        if value.ability_to_check(game, troops, end_pos) == @colour
+        if value.ability_to_check(game, troops, end_pos, @colour) == @enemy
           reverse_place(game, end_pos)
           return true
         end
