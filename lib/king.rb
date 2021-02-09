@@ -2,6 +2,11 @@ require './lib/pieces.rb'
 require './lib/troops.rb'
 
 class King < Piece
+  def initialize(game, colour, symbol, pos)
+    super(game, colour, symbol, pos)
+    @king = true
+  end
+
   def possible_moves(game, troops, pos = @pos)
     @possible = []
     potential_pos(game, pos).each do |post|

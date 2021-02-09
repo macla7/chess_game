@@ -33,7 +33,7 @@ troops = {
   'bb1' => Bishop.new(game, 'black', game.black[:Bishop], [3,8]),
   'bb2' => Bishop.new(game, 'black', game.black[:Bishop], [6,8]),
   #'wq' => Queen.new(game, 'white', game.white[:Queen], [4,1]),
-  'bq' => Queen.new(game, 'black', game.black[:Queen], [5,8]),
+  #'bq' => Queen.new(game, 'black', game.black[:Queen], [5,8]),
   'bk' => King.new(game, 'black', game.black[:King], [4,5]),
   'wk' => King.new(game, 'white', game.white[:King], [5,1])
   }

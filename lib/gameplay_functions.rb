@@ -29,7 +29,7 @@ def touch_piece(game, troops, colour)
     else
       if troops.key?(piece) && piece.match(/^#{colour[0]}/)
         # THINK THE ISSUE IS HAPPENING HERE SOMEHOW...
-        if troops[piece].possible_moves(game, troops).empty?
+        if troops[piece].possible_movements(game, troops).empty?
           print "\n  This piece can't move."
         else
           return piece
@@ -52,7 +52,6 @@ def pick_move(troops, piece, game)
     possible_y.push(move[1])
   end
   loop do
-    troops[piece].possible_movements(game, troops)
     print "\nLetter: "
     across = gets.chomp
     across && break if across == 'back'
@@ -72,7 +71,7 @@ def pick_move(troops, piece, game)
   end
   return 'back' if up == 'back'
 
-  return [across, up] if troops[piece].possible_moves(game, troops).include?([across, up])
+  return [across, up] if troops[piece].possible_movements(game, troops).include?([across, up])
 end
 
 def convert_letter(letter)

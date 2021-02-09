@@ -19,31 +19,30 @@ class Piece
 
   def possible_movements(game, troops)
     # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
-    unless @dead == true
-      possible_moves(game, troops)
+    @possible = possible_moves(game, troops)
+    unless @king
       safe_moves = []
       @are_we_in_check = false
-      p @possible
       @possible.each do |post|
         place(game, post)
         troops.each do |key, value|
           value.still_around(game)
-          unless key == 'bk'
+          unless key == 'bk' && key == 'wk'
             @are_we_in_check = true if value.check(game, troops, value.pos, @enemy) == @colour
           end
           reverse_place(game, post)
           value.reverse_kill
         end
-        p @are_we_in_check
         safe_moves.push(post) if !@are_we_in_check
+        @possible = safe_moves
         @are_we_in_check = false
       end
-      p safe_moves
     end
+    @possible
   end
 
   def move_piece(game, troops, end_pos)
-    possible_moves(game, troops)
+    possible_movements(game, troops)
     if @possible.include?(end_pos)
       place(game, end_pos, troops)
       wip_es(game)
@@ -89,10 +88,7 @@ class Piece
     possible_moves(game, troops, pos)
     @possible.each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
-      if piece_type == game.black[:King] && colour == 'white'
-        p @symbol 
-        return 'black'
-      end
+      return 'black' if piece_type == game.black[:King] && colour == 'white'
       return 'white' if piece_type == game.white[:King] && colour == 'black'
     end
     false
