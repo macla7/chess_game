@@ -46,6 +46,7 @@ def pick_move(troops, piece, game)
   possible_y = []
   across = ''
   up = ''
+  p troops[piece].possible
   troops[piece].possible.each do |move|
     puts "\t#{convert_number(move[0])} - #{move[1]}"
     possible_x.push(move[0])

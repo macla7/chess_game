@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos, :checked, :last_spot
+  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter 
   def initialize(game, colour, symbol, pos = [1,1])
     @pos = pos
     @possible = []
@@ -68,6 +68,7 @@ class Piece
     @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
+    @move_counter += 1
     @pos = end_pos
   end
 
@@ -75,7 +76,7 @@ class Piece
     @pos = last_spot
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
-    @move_counter = 0 if @move_counter.positive?
+    @move_counter -= 1 if @move_counter.positive?
   end
 
   def moves(game, end_pos, troops)

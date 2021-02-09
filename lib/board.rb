@@ -33,19 +33,20 @@ class Chessboard
   end
 
   def print_board
-    puts " --------------------------------------\n\n"
-    puts ' --------------------------------------'
+    puts '  ---------------------------------------'
+    print "       a   b   c   d   e   f   g   h\n"
+    puts '  ---------------------------------------'
     8.downto(1) do |j|
-      print '  ||'
+      print " #{j} |-|"
       for i in 1..8
         print " #{@board["#{i}, #{j}"]} |" unless @board["#{i}, #{j}"] == 'e'
         print '   |' if @board["#{i}, #{j}"] == 'e'
       end
-      puts "| #{j}\n"
+      puts "-| #{j}\n"
     end
-    puts ' --------------------------------------'
-    print "    a   b   c   d   e   f   g   h\n"
-    puts ' --------------------------------------'
+    puts '  ---------------------------------------'
+    print "       a   b   c   d   e   f   g   h\n"
+    puts '  ---------------------------------------'
   end
 
   def check_mate?(game, troops, colour, checker)

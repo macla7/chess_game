@@ -18,3 +18,5 @@ my possible_movements and checker.check code actions overlap (ie they both cause
 
 NEXT UP:
 Pawn Promotions and castling.
+
+need to figure out moving the rook in the castle, atm i've added a third string to the possible move, not sure of effect.

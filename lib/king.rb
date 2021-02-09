@@ -9,6 +9,7 @@ class King < Piece
 
   def possible_moves(game, troops, pos = @pos)
     @possible = []
+    castling(game, troops, pos)
     potential_pos(game, pos).each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
       if game.allowed?(post) && !cant_move_into_check(game, troops, post) && !neighbour_king(game, post)
@@ -17,6 +18,26 @@ class King < Piece
       end
     end
     @possible
+  end
+
+  def castling(game, troops, pos)
+    if @colour == 'white'
+      rook = 'wr1'
+      j = -1 
+    end
+    if @colour == 'black'
+      rook = 'br1'
+      j = 1 
+    end
+    if @move_counter.zero? && troops[rook].move_counter.zero?
+      for i in [1 * j, 2 * j]
+        if game.board["#{pos[0]+i}, #{pos[1]}"] == ' ' && game.board["#{pos[0]+4*j}, #{pos[1]}"] == game.white[:Rook]
+          p cant_move_into_check(game, troops, [pos[0]+i, pos[1]])
+          return false if cant_move_into_check(game, troops, [pos[0]+i, pos[1]])
+        end
+      end
+      @possible.push([pos[0]+2*j, pos[1], 'castle'])
+    end
   end
 
   def neighbour_king(game, pos)
