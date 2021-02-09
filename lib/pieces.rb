@@ -18,29 +18,34 @@ class Piece
   end
 
   def possible_movements(game, troops)
-    possible_moves(game, troops)
-    safe_moves = []
-    @are_we_in_check = false
-    p @possible
-    @possible.each do |post|
-      place(game, post)
-      troops.each do |key, value|
-        unless key == 'bk'
-          @are_we_in_check = true if value.check(game, troops, value.pos, @enemy) == @colour
-        end
-        reverse_place(game, post)
-      end
-      p @are_we_in_check
-      safe_moves.push(post) if !@are_we_in_check
+    # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
+    unless @dead == true
+      possible_moves(game, troops)
+      safe_moves = []
       @are_we_in_check = false
+      p @possible
+      @possible.each do |post|
+        place(game, post)
+        troops.each do |key, value|
+          value.still_around(game)
+          unless key == 'bk'
+            @are_we_in_check = true if value.check(game, troops, value.pos, @enemy) == @colour
+          end
+          reverse_place(game, post)
+          value.reverse_kill
+        end
+        p @are_we_in_check
+        safe_moves.push(post) if !@are_we_in_check
+        @are_we_in_check = false
+      end
+      p safe_moves
     end
-    p safe_moves
   end
 
   def move_piece(game, troops, end_pos)
     possible_moves(game, troops)
     if @possible.include?(end_pos)
-      place(game, end_pos)
+      place(game, end_pos, troops)
       wip_es(game)
       @turn_counter += 1
     else
@@ -59,7 +64,7 @@ class Piece
     end
   end
 
-  def place(game, end_pos)
+  def place(game, end_pos, troops = nil)
     @last_killed = game.board["#{end_pos[0]}, #{end_pos[1]}"]
     @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
@@ -101,5 +106,24 @@ class Piece
       return 'white' if post == end_pos && colour == 'black'
     end
     false
+  end
+
+  def still_around(game)
+    return 'false' if @pos == nil
+
+    if game.board["#{@pos[0]}, #{@pos[1]}"] != @symbol
+      @dead = true
+      @last_spot = @pos
+      @pos = nil
+      p 'killed'
+    end
+  end
+
+  def reverse_kill
+    if @dead
+      @dead = false
+      @pos = @last_spot
+      p 'back to life!'
+    end
   end
 end

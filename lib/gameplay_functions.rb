@@ -110,6 +110,9 @@ def turn(troops, game, colour)
     move = pick_move(troops, piece, game)
   end
   troops[piece].move_piece(game, troops, move)
+  troops.each do |_key, value|
+    value.still_around(game)
+  end
   game.print_board
   troops[piece]
 end
