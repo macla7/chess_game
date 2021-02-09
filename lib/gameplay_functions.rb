@@ -112,6 +112,7 @@ def turn(troops, game, colour)
   troops.each do |_key, value|
     value.still_around(game)
   end
+  system('clear')
   game.print_board
   troops[piece]
 end
