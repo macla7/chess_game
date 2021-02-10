@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter 
+  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol
   def initialize(game, colour, symbol, pos = [1,1])
     @pos = pos
     @possible = []
