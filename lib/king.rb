@@ -41,7 +41,6 @@ class King < Piece
         end
       end
     end
-    p can_castle
     @possible.push([pos[0]+2*j, pos[1], 'castle-long']) if can_castle.all?('true')
   end
 
@@ -55,6 +54,8 @@ class King < Piece
       rook = 'br1'
       j = -1
     end
+    p "counter is at #{troops[rook.to_s].move_counter}"
+    p "#{rook} is the rook"
     if @move_counter.zero? && troops[rook].move_counter.zero?
       for i in [1 * j, 2 * j]
         if game.board["#{pos[0]+i}, #{pos[1]}"] == ' ' && game.board["#{pos[0]+3*j}, #{pos[1]}"] != ' '
@@ -65,7 +66,6 @@ class King < Piece
         end
       end
     end
-    p can_castle
     @possible.push([pos[0]+2*j, pos[1], 'castle-short']) if can_castle.all?('true')
   end
 

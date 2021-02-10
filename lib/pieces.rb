@@ -38,14 +38,12 @@ class Piece
         @are_we_in_check = false
       end
     end
-    p @possible
     @possible
 
   end
 
   def move_piece(game, troops, end_pos)
     possible_movements(game, troops)
-    p @possible_movements
     castle_move_long(game, troops)
     castle_move_short(game, troops)
     if @possible.include?(end_pos)
@@ -72,7 +70,6 @@ class Piece
     @possible[0].pop
   end
 
-
   def wip_es(game)
     for i in 1..8
       for j in 1..8
@@ -90,12 +87,14 @@ class Piece
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @move_counter += 1
     @pos = end_pos
+    p "at the end? #{@move_counter}"
   end
 
   def reverse_place(game, end_pos)
     @pos = last_spot
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
+    p "#{@move_counter} minus 1 is about to be exectued."
     @move_counter -= 1 if @move_counter.positive?
   end
 
