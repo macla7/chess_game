@@ -10,6 +10,7 @@ class King < Piece
   def possible_moves(game, troops, pos = @pos)
     @possible = []
     castling_long(game, troops, pos)
+    castling_short(game, troops, pos)
     potential_pos(game, pos).each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
       if game.allowed?(post) && !cant_move_into_check(game, troops, post) && !neighbour_king(game, post)
@@ -27,7 +28,7 @@ class King < Piece
       j = -1
     end
     if @colour == 'black'
-      rook = 'br1'
+      rook = 'br2'
       j = 1 
     end
     if @move_counter.zero? && troops[rook].move_counter.zero?
@@ -41,7 +42,31 @@ class King < Piece
       end
     end
     p can_castle
-    @possible.push([pos[0]+2*j, pos[1], 'castle']) if can_castle.all?('true')
+    @possible.push([pos[0]+2*j, pos[1], 'castle-long']) if can_castle.all?('true')
+  end
+
+  def castling_short(game, troops, pos)
+    can_castle = Array.new(2, 'false')
+    if @colour == 'white'
+      rook = 'wr2'
+      j = 1
+    end
+    if @colour == 'black'
+      rook = 'br1'
+      j = -1
+    end
+    if @move_counter.zero? && troops[rook].move_counter.zero?
+      for i in [1 * j, 2 * j]
+        if game.board["#{pos[0]+i}, #{pos[1]}"] == ' ' && game.board["#{pos[0]+3*j}, #{pos[1]}"] != ' '
+          if !cant_move_into_check(game, troops, [pos[0]+i, pos[1]])
+            can_castle.shift
+            can_castle.push('true')
+          end
+        end
+      end
+    end
+    p can_castle
+    @possible.push([pos[0]+2*j, pos[1], 'castle-short']) if can_castle.all?('true')
   end
 
   def neighbour_king(game, pos)

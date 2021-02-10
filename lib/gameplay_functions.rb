@@ -72,7 +72,9 @@ def pick_move(troops, piece, game)
   end
   return 'back' if up == 'back'
 
-  return [across, up] if troops[piece].possible_movements(game, troops).include?([across, up])
+  return [across, up] if troops[piece].possible_movements(game, troops).any?([across, up])
+  return [across, up] if troops[piece].possible_movements(game, troops).any?([across, up, 'castle-long'])
+  return [across, up] if troops[piece].possible_movements(game, troops).any?([across, up, 'castle-short'])
 end
 
 def convert_letter(letter)

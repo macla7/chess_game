@@ -38,11 +38,16 @@ class Piece
         @are_we_in_check = false
       end
     end
+    p @possible
     @possible
+
   end
 
   def move_piece(game, troops, end_pos)
     possible_movements(game, troops)
+    p @possible_movements
+    castle_move_long(game, troops)
+    castle_move_short(game, troops)
     if @possible.include?(end_pos)
       place(game, end_pos, troops)
       wip_es(game)
@@ -52,6 +57,21 @@ class Piece
     end
     @checked = check(game, troops, end_pos)
   end
+
+  def castle_move_long(game, troops)
+    return unless @possible[0][2] == 'castle-long'
+    troops['wr1'].place(game, [4,1]) if @colour == 'white'
+    troops['br2'].place(game, [5,8]) if @colour == 'black'
+    @possible[0].pop
+  end
+
+  def castle_move_short(game, troops)
+    return unless @possible[0][2] == 'castle-short'
+    troops['wr2'].place(game, [6,1]) if @colour == 'white'
+    troops['br1'].place(game, [3,8]) if @colour == 'black'
+    @possible[0].pop
+  end
+
 
   def wip_es(game)
     for i in 1..8
