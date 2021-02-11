@@ -54,8 +54,6 @@ class King < Piece
       rook = 'br1'
       j = -1
     end
-    p "counter is at #{troops[rook.to_s].move_counter}"
-    p "#{rook} is the rook"
     if @move_counter.zero? && troops[rook].move_counter.zero?
       for i in [1 * j, 2 * j]
         if game.board["#{pos[0]+i}, #{pos[1]}"] == ' ' && game.board["#{pos[0]+3*j}, #{pos[1]}"] != ' '

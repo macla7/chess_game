@@ -1,7 +1,8 @@
 class Chessboard
-  attr_accessor :board, :black, :white
+  attr_accessor :board, :black, :white, :turn_counter
   def initialize
     @board = {}
+    @turn_counter = 0
     for i in 1..8
       for j in 1..8
         @board["#{i}, #{j}"] = ' '

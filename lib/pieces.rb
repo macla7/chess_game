@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol
+  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol, :died_at
   def initialize(game, colour, symbol, pos = [1,1])
     @pos = pos
     @possible = []
@@ -30,16 +30,15 @@ class Piece
           unless key == 'bk' && key == 'wk'
             @are_we_in_check = true if value.check(game, troops, value.pos, @enemy) == @colour
           end
-          reverse_place(game, post)
-          value.reverse_kill
+          value.reverse_kill if game.turn_counter == value.died_at
         end
+        reverse_place(game, post)
         safe_moves.push(post) if !@are_we_in_check
         @possible = safe_moves
         @are_we_in_check = false
       end
     end
     @possible
-
   end
 
   def move_piece(game, troops, end_pos)
@@ -49,10 +48,13 @@ class Piece
     if @possible.include?(end_pos)
       place(game, end_pos, troops)
       wip_es(game)
-      @turn_counter += 1
     else
       puts "Can't move to #{end_pos}, sorry!"
     end
+    troops.each do |_key, value|
+      value.still_around(game)
+    end
+    game.turn_counter += 1
     @checked = check(game, troops, end_pos)
   end
 
@@ -87,14 +89,12 @@ class Piece
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @move_counter += 1
     @pos = end_pos
-    p "at the end? #{@move_counter}"
   end
 
   def reverse_place(game, end_pos)
     @pos = last_spot
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
-    p "#{@move_counter} minus 1 is about to be exectued."
     @move_counter -= 1 if @move_counter.positive?
   end
 
@@ -127,9 +127,10 @@ class Piece
   def still_around(game)
     return 'false' if @pos == nil
 
-    if game.board["#{@pos[0]}, #{@pos[1]}"] != @symbol
+    if game.board["#{@pos[0]}, #{@pos[1]}"] != @symbol && @dead == false
       @dead = true
       @last_spot = @pos
+      @died_at = @turn_counter
       @pos = nil
       p 'killed'
     end
