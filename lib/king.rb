@@ -2,8 +2,8 @@ require './lib/pieces.rb'
 require './lib/troops.rb'
 
 class King < Piece
-  def initialize(game, colour, symbol, pos)
-    super(game, colour, symbol, pos)
+  def initialize(game, colour, symbol, pos, name)
+    super(game, colour, symbol, pos, name)
     @king = true
   end
 

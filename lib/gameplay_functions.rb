@@ -24,22 +24,39 @@ end
 
 def touch_piece(game, troops, colour)
   print "\n  Please pick the piece you'd like to move.\n"
+  piece = ''
+  across = ''
+  up = ''
   loop do
     print "\nPiece: "
-    piece = gets.chomp
-    if piece == 'help'
-      help
-    else
-      if troops.key?(piece) && piece.match(/^#{colour[0]}/)
-        # THINK THE ISSUE IS HAPPENING HERE SOMEHOW...
-        if troops[piece].possible_movements(game, troops).empty?
-          print "\n  This piece can't move."
-        else
-          return piece
-        end
-      end
-      print "\n  Type 'help' if you're battling.\n"
+    loop do
+      print "\nLetter: "
+      across = gets.chomp
+      across && break if across == 'back'
+  
+      across = convert_letter(across)
+      across && break if [1,2,3,4,5,6,7,8].include?(across)
     end
+    return 'back' if across == 'back'
+  
+    loop do
+      print "Number: "
+      up = gets.chomp
+      up && break if up == 'back'
+  
+      up = up.to_i
+      up && break if [1,2,3,4,5,6,7,8].include?(up)
+    end
+    return 'back' if up == 'back'
+
+    troops.each do |key, value|
+      if game.board["#{across}, #{up}"] == ##WHITE THEN RETURN NAME.. CONTINUE ON
+        piece = value
+        return piece
+      end
+    end
+    p piece
+    break if piece != ''
   end
 end
 
@@ -49,6 +66,7 @@ def pick_move(troops, piece, game)
   possible_y = []
   across = ''
   up = ''
+  return 'back' if piece == 'back'
   troops[piece].possible.each do |move|
     puts "\t#{convert_number(move[0])} - #{move[1]}"
     possible_x.push(move[0])

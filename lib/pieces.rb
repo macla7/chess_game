@@ -1,6 +1,6 @@
 class Piece
-  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol, :died_at
-  def initialize(game, colour, symbol, pos = [1,1])
+  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol, :died_at, :name
+  def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
     @possible = []
     @game = game
@@ -13,6 +13,7 @@ class Piece
     @last_spot = ''
     @pawn = false
     @move_counter = 0
+    @name = name
     @enemy = 'black' if @colour == 'white'
     @enemy = 'white' if @colour == 'black'
   end

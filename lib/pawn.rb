@@ -2,8 +2,8 @@ require './lib/pieces.rb'
 
 class Pawn < Piece
   attr_reader :last_killed
-  def initialize(game, colour, symbol, pos)
-    super(game, colour, symbol, pos)
+  def initialize(game, colour, symbol, pos, name)
+    super(game, colour, symbol, pos, name)
     @pawn = true
     @j = 1 if @colour == 'white'
     @j = -1 if @colour == 'black'
