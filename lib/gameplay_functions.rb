@@ -7,16 +7,19 @@ def help
   first letter of their name + the
   number they are (from left to right).\n\n"
   print "  For example, if you want to call
-  the knight start from the bottom
-  left, type 'k1'.\t\n\n"
+  a knight, start from the
+  left, so type 'wk1'.\t\n\n"
+  print "  Alternatively, if you're black,
+  and trying to call your bishop that 
+  starts at f -8, you'd type 'bb2'.\t\n\n"
   print "  Similarly for your third pawn
   from the left, type 'p3'\t\n\n"
   print "  MOVES:\n\n"
   print "  You will then be presented with
   a list of possible moves, if you
   wish to move your piece to one,
-  type the numbers out as presented,
-  with a comma inbetween.\n\n"
+  type the letter then number out 
+  as presented.\n\n"
 end
 
 def touch_piece(game, troops, colour)
@@ -67,7 +70,7 @@ def pick_move(troops, piece, game)
     up && break if up == 'back'
 
     up = up.to_i
-    up.to_i && break if possible_y.include?(up.to_i)
+    up && break if troops[piece].possible.include?([across, up]) || troops[piece].possible.include?([across, up, 'castle-long']) || troops[piece].possible.include?([across, up, 'castle-short'])
   end
   return 'back' if up == 'back'
 
