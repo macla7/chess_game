@@ -38,16 +38,14 @@ troops = {
   'wk' => King.new(game, 'white', game.white[:King], [5,1], 'wk')
   }
 
-game.print_board
-introduction
-help
+help(game)
 game_over = false
 
 loop do
   unless game_over
     loop do
       puts "  WHITE'S TURN!\n"
-      piece = turn(troops, game, 'white')
+      piece = turn(troops, game, 'white', 'black')
       break if piece.checked == false
       if check_sequence(troops, game, 'black', piece, @pos) == 'check mate'
         p 'White wins!'
@@ -59,7 +57,7 @@ loop do
   unless game_over
     loop do
       puts "  BLACK's TURN!\n"
-      piece = turn(troops, game, 'black')
+      piece = turn(troops, game, 'black', 'white')
       break if piece.checked == false
       if check_sequence(troops, game, 'white', piece, @pos) == 'check mate'
         p 'Black wins!'

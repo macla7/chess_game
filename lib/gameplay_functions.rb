@@ -1,73 +1,90 @@
-def introduction
-  puts "\n  Hi, you are white. Godspeed.\n\n"
-end
-
-def help
-  print "  Your pieces can be called by the
-  first letter of their name + the
-  number they are (from left to right).\n\n"
-  print "  For example, if you want to call
-  a knight, start from the
-  left, so type 'wk1'.\t\n\n"
-  print "  Alternatively, if you're black,
-  and trying to call your bishop that 
-  starts at f -8, you'd type 'bb2'.\t\n\n"
-  print "  Similarly for your third pawn
-  from the left, type 'p3'\t\n\n"
+def help(game)
+  clear_and_print(game)
+  puts "\n  Hi, you are white.\n\n"
+  print "  Call pieces by entering the 
+  letter then the number of the 
+  square they are in.\n\n"
+  print "  For example, the white knight 
+  starts in square b1. \t\n\n"
   print "  MOVES:\n\n"
   print "  You will then be presented with
-  a list of possible moves, if you
-  wish to move your piece to one,
-  type the letter then number out 
-  as presented.\n\n"
+  a list of possible moves, move 
+  them to any of the listed squares.\n\n"
+  print "  At any point, type 'back' to 
+  pick another piece, or 'help' 
+  to get these instructions again.\n\n"
+
+  print "  Press enter to continue..\n\n"
+  gets
 end
 
-def touch_piece(game, troops, colour)
+def touch_piece(game, troops, colour, enemy)
   print "\n  Please pick the piece you'd like to move.\n"
   piece = ''
   across = ''
   up = ''
   loop do
+    clear_and_print(game)
     print "\nPiece: "
     loop do
       print "\nLetter: "
       across = gets.chomp
-      across && break if across == 'back'
+      across && break if %w[back help].include?(across)
   
       across = convert_letter(across)
       across && break if [1,2,3,4,5,6,7,8].include?(across)
     end
     return 'back' if across == 'back'
-  
+    help(game) if across == 'help'
+    return 'back' if across == 'help'
+
     loop do
       print "Number: "
       up = gets.chomp
-      up && break if up == 'back'
+      up && break if %w[back help].include?(up)
   
       up = up.to_i
       up && break if [1,2,3,4,5,6,7,8].include?(up)
     end
     return 'back' if up == 'back'
+    help(game) if up == 'help'
+    return 'back' if up == 'help'
 
     troops.each do |key, value|
-      if game.board["#{across}, #{up}"] == ##WHITE THEN RETURN NAME.. CONTINUE ON
-        piece = value
+      if value.pos == [across, up]
+        # FIX THESE TWO METHODS
+        puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
+        return if value.colour == enemy
+        if value.possible_movements(game, troops).empty?
+          return puts "\nThis #{value.symbol} has no possible moves.."
+        end
+        piece = value.name
         return piece
       end
     end
-    p piece
     break if piece != ''
+    puts "\nTry again Sir..\n\n"
+    puts '3..'
+    sleep 1
+    puts '2..'
+    sleep 1
+    puts '1..'
+    sleep 1
   end
+  piece.to_s
 end
 
 def pick_move(troops, piece, game)
-  print "\n\n  Please pick from the following moves..\n\n"
+  clear_and_print(game)
+  print "\n\n  Please pick from the following 
+  moves with the #{troops[piece].symbol} you selected..\n\n"
   possible_x = []
   possible_y = []
   across = ''
   up = ''
   return 'back' if piece == 'back'
-  troops[piece].possible.each do |move|
+  
+  troops[piece].possible_movements(game, troops).each do |move|
     puts "\t#{convert_number(move[0])} - #{move[1]}"
     possible_x.push(move[0])
     possible_y.push(move[1])
@@ -124,19 +141,18 @@ def convert_number(number)
   end
 end
 
-def turn(troops, game, colour)
+def turn(troops, game, colour, enemy)
   piece = ' '
   move = 'back'
   while move == 'back'
-    piece = touch_piece(game, troops, colour)
+    piece = touch_piece(game, troops, colour, enemy)
     move = pick_move(troops, piece, game)
   end
   troops[piece].move_piece(game, troops, move)
   troops.each do |_key, value|
     value.still_around(game)
   end
-  system('clear')
-  game.print_board
+  clear_and_print(game)
   troops[piece]
 end
 
@@ -145,7 +161,7 @@ def check_sequence(troops, game, colour, checker, old_pos)
     return 'check mate'
   end
   loop do
-    last_piece = turn(troops, game, colour)
+    last_piece = turn(troops, game, colour, colour)
     if !checker.check(game, troops, checker.pos)
       break
     else
@@ -153,5 +169,10 @@ def check_sequence(troops, game, colour, checker, old_pos)
       game.print_board
     end
   end
+end
+
+def clear_and_print(game)
+  system('clear')
+  game.print_board
 end
 
