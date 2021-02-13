@@ -80,15 +80,23 @@ class King < Piece
     # inefficient, but because of pawns essentially HAVE to, move the king and test all possible moves again..
     place(game, end_pos)
     troops.each do |key, value|
+      value.still_around(game)
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, troops, end_pos, @colour) == @enemy
           reverse_place(game, end_pos)
+          value.reverse_kill ##??
           return true
         end
       end
+      value.reverse_kill
     end
-    reverse_place(game, end_pos)
+    reverse_place(game, end_pos) ##??
     false
+  end
+
+  def take_checker(game, troops)
+    troops.each do |key, value|
+    end
   end
 
   def potential_pos(game, pos)

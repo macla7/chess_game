@@ -8,7 +8,7 @@ class Chessboard
         @board["#{i}, #{j}"] = ' '
       end
     end
-    @white = {
+    @black = {
       Rook: "\u{2656}",
       Knight: "\u{2658}",
       Bishop: "\u{2657}",
@@ -17,7 +17,7 @@ class Chessboard
       Pawn: "\u{2659}"
     }
 
-    @black = {
+    @white = {
       Rook: "\u{265C}",
       Knight: "\u{265E}",
       Bishop: "\u{265D}",

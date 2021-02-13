@@ -22,3 +22,8 @@ Pawn Promotions and castling.
 need to figure out moving the rook in the castle, atm i've added a third string to the possible move, not sure of effect.
 
 final few minor issue with castling it seems, but the crux of it done. test it further.
+
+
+Need to figure out king being able to take enemy that's checking it unprotected.
+
+pawn attacking forward too.. that some wrong stuff lol

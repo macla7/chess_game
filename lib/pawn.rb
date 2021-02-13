@@ -10,7 +10,6 @@ class Pawn < Piece
   end
 
   def possible_moves(game, troops, pos = @pos)
-    
     potential_shifts = [[0, @j]] 
     piece_type = game.board["#{@pos[0]}, #{@pos[1] + (2 * @j)}"]
     potential_shifts.push([0,2*@j]) if @move_counter.zero? && piece_type == ' '
@@ -44,6 +43,9 @@ class Pawn < Piece
       game.board["#{@old_pos[0]}, #{@old_pos[1]+@j}"] = 'e'
     end
     en_passant_kill(game, end_pos)
+    if promotion?
+      promote(game, troops)
+    end
   end
 
   def en_passant_kill(game, end_pos)
@@ -68,5 +70,30 @@ class Pawn < Piece
       end
     end
   end
+
+  def promotion?
+    return true if @pos[1] == 1 || @pos[1] == 8
+    false
+  end
+
+  def promote(game, troops)
+    puts '  What kind of piece would you like to promote to?'
+    puts '  Please pick one of the following.'
+    game.white.each do |key, _value|
+      puts "  #{key}" unless key == :King
+    end
+    piece = ''
+    while !game.white.key?(piece)
+      piece = gets.chomp.to_sym
+      p piece
+      piece = '' if piece == :King
+    end
+    case piece
+    when :Queen
+      puts 'Promoted to a Queen!'
+      troops[@name] = Queen.new(game, @colour, game.black[:Queen], @pos, @name)
+    end
+  end
+
 
 end
