@@ -16,48 +16,50 @@ def help(game)
 
   print "  Press enter to continue..\n\n"
   gets
+  clear_and_print(game)
 end
 
 def touch_piece(game, troops, colour, enemy)
   print "\n  Please pick the piece you'd like to move.\n"
   piece = ''
-  across = ''
-  up = ''
   loop do
+    across = 'back'
+    up = 'back'
     clear_and_print(game)
-    print "\nPiece: "
-    loop do
-      print "\nLetter: "
-      across = gets.chomp
-      across && break if %w[back help].include?(across)
-  
-      across = convert_letter(across)
-      across && break if [1,2,3,4,5,6,7,8].include?(across)
-    end
-    return 'back' if across == 'back'
-    help(game) if across == 'help'
-    return 'back' if across == 'help'
+    while up == 'back' || up == 'help'
+      clear_and_print(game)
+      across = 'back'
+      while across == 'back' || across == 'help'
+        clear_and_print(game)
+        loop do
+          print "\nLetter: "
+          across = gets.chomp
+          across && break if %w[back help].include?(across)
 
-    loop do
-      print "Number: "
-      up = gets.chomp
-      up && break if %w[back help].include?(up)
-  
-      up = up.to_i
-      up && break if [1,2,3,4,5,6,7,8].include?(up)
-    end
-    return 'back' if up == 'back'
-    help(game) if up == 'help'
-    return 'back' if up == 'help'
+          across = convert_letter(across)
+          across && break if [1,2,3,4,5,6,7,8].include?(across)
+        end
+        help(game) if across == 'help'
+      end
 
-    troops.each do |key, value|
+      loop do
+        print "Number: "
+        up = gets.chomp
+        up && break if %w[back help].include?(up)
+
+        up = up.to_i
+        up && break if [1,2,3,4,5,6,7,8].include?(up)
+      end
+      help(game) if up == 'help'
+    end
+
+    troops.each do |_key, value|
       if value.pos == [across, up]
         # FIX THESE TWO METHODS
         puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
-        return if value.colour == enemy
-        if value.possible_movements(game, troops).empty?
-          return puts "\nThis #{value.symbol} has no possible moves.."
-        end
+        break if value.colour == enemy
+        puts "\nThis #{value.symbol} has no possible moves.." if value.possible_movements(game, troops).empty?
+        break if value.possible_movements(game, troops).empty?
         piece = value.name
         return piece
       end
@@ -82,7 +84,6 @@ def pick_move(troops, piece, game)
   possible_y = []
   across = ''
   up = ''
-  return 'back' if piece == 'back'
   
   troops[piece].possible_movements(game, troops).each do |move|
     puts "\t#{convert_number(move[0])} - #{move[1]}"
@@ -174,5 +175,5 @@ end
 def clear_and_print(game)
   system('clear')
   game.print_board
+  print "\nPiece: "
 end
-
