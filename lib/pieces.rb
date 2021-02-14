@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol, :died_at, :name, :colour
+  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead
   def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
     @possible = []
@@ -20,7 +20,6 @@ class Piece
   end
 
   def possible_movements(game, troops)
-    p "#{name} dead!" if @dead
     return [] if @dead
     # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
     @possible = possible_moves(game, troops)
@@ -134,7 +133,7 @@ class Piece
 
     if game.board["#{@pos[0]}, #{@pos[1]}"] != @symbol && @dead == false
       @dead = true
-      @last_spot = @pos
+      @died_at = @pos
       @died_at = @turn_counter
       @pos = nil
     end
@@ -143,7 +142,7 @@ class Piece
   def reverse_kill
     if @dead
       @dead = false
-      @pos = @last_spot
+      @pos = @died_at
     end
   end
 end
