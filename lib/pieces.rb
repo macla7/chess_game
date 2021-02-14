@@ -16,7 +16,7 @@ class Piece
     @name = name
     @enemy = 'black' if @colour == 'white'
     @enemy = 'white' if @colour == 'black'
-    @dead
+    @dead = false
   end
 
   def possible_movements(game, troops)

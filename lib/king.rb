@@ -80,6 +80,7 @@ class King < Piece
     # inefficient, but because of pawns essentially HAVE to, move the king and test all possible moves again..
     place(game, end_pos)
     troops.each do |key, value|
+      ## FOUND THE PROBLEM !!!!!!!!!!CDNANC!!!!!!!!
       value.still_around(game)
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, troops, end_pos, @colour) == @enemy
