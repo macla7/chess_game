@@ -2,6 +2,7 @@ require './lib/pieces.rb'
 
 class Knight < Piece
   def possible_moves(game, troops, pos = @pos)
+    return if @dead
     @possible = []
     potential_shifts = [[1, 2],[2, 1],[2, -1],[1, -2],[-1, -2],[-2, -1],[-2, 1],[-1, 2]]
     potential_pos = []

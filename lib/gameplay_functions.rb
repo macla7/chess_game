@@ -72,6 +72,7 @@ def touch_piece(game, troops, colour, enemy)
     sleep 1
     puts '1..'
     sleep 1
+    gets
   end
   piece.to_s
 end

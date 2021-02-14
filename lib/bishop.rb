@@ -2,6 +2,7 @@ require './lib/pieces.rb'
 
 class Bishop < Piece
   def possible_moves(game, troops, pos = @pos)
+    return if @dead
     @possible = []
     possible_ur_dl(game, pos)
     possible_ul_dr(game, pos)

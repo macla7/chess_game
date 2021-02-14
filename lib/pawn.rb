@@ -10,6 +10,7 @@ class Pawn < Piece
   end
 
   def possible_moves(game, troops, pos = @pos)
+    return if @dead
     potential_shifts = [[0, @j]] 
     piece_type = game.board["#{@pos[0]}, #{@pos[1] + (2 * @j)}"]
     potential_shifts.push([0,2*@j]) if @move_counter.zero? && piece_type == ' '
@@ -17,6 +18,7 @@ class Pawn < Piece
   end
 
   def pawn_attack(game, troops, pos, potential_shifts = [])
+    return if @dead
     for i in [-1, 1]
       piece_type = game.board["#{@pos[0]+i}, #{@pos[1]+@j}"]
       b = [i, @j]
@@ -91,7 +93,11 @@ class Pawn < Piece
     case piece
     when :Queen
       puts 'Promoted to a Queen!'
-      troops[@name] = Queen.new(game, @colour, game.black[:Queen], @pos, @name)
+      troops['neh'] = Queen.new(game, @colour, game.black[:Queen], @pos, @name)
+      troops.each {|key, value| p key}
+      still_around(game)
+      p @dead
+      gets
     end
   end
 

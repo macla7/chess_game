@@ -16,9 +16,12 @@ class Piece
     @name = name
     @enemy = 'black' if @colour == 'white'
     @enemy = 'white' if @colour == 'black'
+    @dead
   end
 
   def possible_movements(game, troops)
+    p "#{name} dead!" if @dead
+    return [] if @dead
     # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
     @possible = possible_moves(game, troops)
     unless @king
@@ -46,6 +49,7 @@ class Piece
     possible_movements(game, troops)
     castle_move_long(game, troops)
     castle_move_short(game, troops)
+    return [] if @dead
     if @possible.include?(end_pos)
       place(game, end_pos, troops)
       wip_es(game)
@@ -133,7 +137,6 @@ class Piece
       @last_spot = @pos
       @died_at = @turn_counter
       @pos = nil
-      p 'killed'
     end
   end
 
@@ -141,7 +144,6 @@ class Piece
     if @dead
       @dead = false
       @pos = @last_spot
-      p 'back to life!'
     end
   end
 end

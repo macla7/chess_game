@@ -83,8 +83,8 @@ class King < Piece
       value.still_around(game)
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, troops, end_pos, @colour) == @enemy
+          value.reverse_kill
           reverse_place(game, end_pos)
-          value.reverse_kill ##??
           return true
         end
       end
@@ -94,10 +94,10 @@ class King < Piece
     false
   end
 
-  def take_checker(game, troops)
-    troops.each do |key, value|
-    end
-  end
+  #def take_checker(game, troops)
+  #  troops.each do |key, value|
+  #  end
+  #end
 
   def potential_pos(game, pos)
     potential_shifts = [[0, 1],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1],[-1, 0],[-1, 1]]
