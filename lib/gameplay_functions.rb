@@ -1,22 +1,23 @@
-def help(game)
-  clear_and_print(game)
+def help(game, colour = '')
+  system('clear')
+  game.print_board
   puts "\n  Hi, you are white.\n\n"
   print "  Call pieces by entering the 
   letter then the number of the 
   square they are in.\n\n"
   print "  For example, the white knight 
   starts in square b1. \t\n\n"
-  print "  MOVES:\n\n"
-  print "  You will then be presented with
-  a list of possible moves, move 
-  them to any of the listed squares.\n\n"
+  print "  MOVES: You will then be 
+  presented with a list of possible 
+  moves, move them to any of the 
+  listed squares.\n\n"
   print "  At any point, type 'back' to 
   pick another piece, or 'help' 
   to get these instructions again.\n\n"
 
   print "  Press enter to continue..\n\n"
   gets
-  clear_and_print(game)
+  clear_and_print(game, colour)
 end
 
 def touch_piece(game, troops, colour, enemy)
@@ -25,12 +26,12 @@ def touch_piece(game, troops, colour, enemy)
   loop do
     across = 'back'
     up = 'back'
-    clear_and_print(game)
+    clear_and_print(game, colour)
     while up == 'back' || up == 'help'
-      clear_and_print(game)
+      clear_and_print(game, colour)
       across = 'back'
       while across == 'back' || across == 'help'
-        clear_and_print(game)
+        clear_and_print(game, colour)
         loop do
           print "\nLetter: "
           across = gets.chomp
@@ -39,7 +40,7 @@ def touch_piece(game, troops, colour, enemy)
           across = convert_letter(across)
           across && break if [1,2,3,4,5,6,7,8].include?(across)
         end
-        help(game) if across == 'help'
+        help(game, colour) if across == 'help'
       end
 
       loop do
@@ -50,7 +51,7 @@ def touch_piece(game, troops, colour, enemy)
         up = up.to_i
         up && break if [1,2,3,4,5,6,7,8].include?(up)
       end
-      help(game) if up == 'help'
+      help(game, colour) if up == 'help'
     end
 
     troops.each do |_key, value|
@@ -76,8 +77,8 @@ def touch_piece(game, troops, colour, enemy)
   piece.to_s
 end
 
-def pick_move(troops, piece, game)
-  clear_and_print(game)
+def pick_move(game, troops, piece, colour)
+  clear_and_print(game, colour)
   print "\n\n  Please pick from the following 
   moves with the #{troops[piece].symbol} you selected..\n\n"
   possible_x = []
@@ -147,17 +148,17 @@ def turn(troops, game, colour, enemy)
   move = 'back'
   while move == 'back'
     piece = touch_piece(game, troops, colour, enemy)
-    move = pick_move(troops, piece, game)
+    move = pick_move(game, troops, piece, colour)
   end
   troops[piece].move_piece(game, troops, move)
   troops.each do |_key, value|
     value.still_around(game)
   end
-  clear_and_print(game)
+  clear_and_print(game, colour)
   troops[piece]
 end
 
-def check_sequence(troops, game, colour, checker, old_pos)
+def check_sequence(game, troops, colour, checker, old_pos)
   if game.check_mate?(game, troops, colour, checker)
     return 'check mate'
   end
@@ -172,8 +173,10 @@ def check_sequence(troops, game, colour, checker, old_pos)
   end
 end
 
-def clear_and_print(game)
+def clear_and_print(game, colour)
   system('clear')
   game.print_board
+  puts "\n  WHITE'S TURN!\n" if colour == 'white'
+  puts "\n  BLACK's TURN!\n" if colour == 'black'
   print "\nPiece: "
 end

@@ -31,8 +31,6 @@ class King < Piece
       rook = 'br2'
       j = 1 
     end
-    p @move_counter if @colour == 'white'
-    p troops[rook].move_counter if @colour == 'white'
     if @move_counter.zero? && troops[rook].move_counter.zero?
       for i in [1 * j, 2 * j, 3 * j]
         if game.board["#{pos[0]+i}, #{pos[1]}"] == ' ' && game.board["#{pos[0]+4*j}, #{pos[1]}"] != ' '
@@ -43,7 +41,6 @@ class King < Piece
         end
       end
     end
-    p can_castle if @colour == 'white'
     @possible.push([pos[0]+2*j, pos[1], 'castle-long']) if can_castle.all?('true')
   end
 
@@ -57,8 +54,6 @@ class King < Piece
       rook = 'br1'
       j = -1
     end
-    p @move_counter if @colour == 'white'
-    p troops[rook].move_counter if @colour == 'white'
     if @move_counter.zero? && troops[rook].move_counter.zero?
       for i in [1 * j, 2 * j]
         if game.board["#{pos[0]+i}, #{pos[1]}"] == ' ' && game.board["#{pos[0]+3*j}, #{pos[1]}"] != ' '
@@ -69,7 +64,6 @@ class King < Piece
         end
       end
     end
-    p can_castle if @colour == 'white'
     @possible.push([pos[0]+2*j, pos[1], 'castle-short']) if can_castle.all?('true')
   end
 
@@ -92,7 +86,6 @@ class King < Piece
         if value.ability_to_check(game, troops, end_pos, @colour) == @enemy
           value.reverse_kill
           reverse_place(game, end_pos)
-          p "#{end_pos} threatened by #{value.name}"
           return true
         end
       end
