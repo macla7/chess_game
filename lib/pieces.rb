@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead
+  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead, :died_when
   attr_accessor :checked
   def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
@@ -8,7 +8,6 @@ class Piece
     @symbol = symbol
     game.board["#{pos[0]}, #{pos[1]}"] = symbol
     @colour = colour
-    @turn_counter = 0
     @last_enpassant = 0
     @checked = false
     @last_spot = ''
@@ -32,9 +31,11 @@ class Piece
         troops.each do |key, value|
           value.still_around(game)
           unless key == 'bk' && key == 'wk'
-            @are_we_in_check = true if value.check(game, troops, value.pos, @enemy) == @colour
+            if value.check(game, troops, value.pos, @enemy) == @colour
+              @are_we_in_check = true
+            end
           end
-          value.reverse_kill if game.turn_counter == value.died_at
+          value.reverse_kill if game.turn_counter == value.died_when
         end
         reverse_place(game, post)
         safe_moves.push(post) if !@are_we_in_check
@@ -110,6 +111,9 @@ class Piece
   end
 
   def check(game, troops, pos = @pos, colour = @colour)
+    @checked = false if @dead
+    return if @dead
+
     possible_moves(game, troops, pos)
     @possible.each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
@@ -135,7 +139,7 @@ class Piece
     if game.board["#{@pos[0]}, #{@pos[1]}"] != @symbol && @dead == false
       @dead = true
       @died_at = @pos
-      @died_at = @turn_counter
+      @died_when = game.turn_counter
       @pos = nil
     end
   end

@@ -54,7 +54,6 @@ def touch_piece(game, troops, colour, enemy)
     end
 
     troops.each do |_key, value|
-      p "possible is #{value.pos}" if value.name == 'neh'
       if value.pos == [across, up]
         # FIX THESE TWO METHODS
         puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
@@ -80,8 +79,6 @@ end
 
 def pick_move(troops, piece, game)
   clear_and_print(game)
-  p troops['bp7'].pos
-  p troops['bp7'].possible
   print "\n\n  Please pick from the following 
   moves with the #{troops[piece].symbol} you selected..\n\n"
   possible_x = []

@@ -12,6 +12,7 @@ class Pawn < Piece
   def possible_moves(game, troops, pos = @pos)
     return if @dead
     potential_shifts = []
+
     piece_two_infront = game.board["#{@pos[0]}, #{@pos[1] + (2 * @j)}"]
     piece_one_infront = game.board["#{@pos[0]}, #{@pos[1] + @j}"]
     potential_shifts = [[0, @j]] if piece_one_infront == ' '
@@ -82,15 +83,15 @@ class Pawn < Piece
 
   def promote(game, troops)
     puts '  What kind of piece would you like to promote to?'
-    puts '  Please pick one of the following.'
+    puts "  Please pick one of the following.\n"
     game.white.each do |key, _value|
-      puts "  #{key}" unless key == :King
+      puts "  - #{key}" unless key == :King || key == :Pawn
     end
     piece = ''
     while !game.white.key?(piece)
       piece = gets.chomp.to_sym
       p piece
-      piece = '' if piece == :King
+      piece = '' if piece == :King || piece == :Pawn
     end
     case piece
     when :Queen
@@ -99,10 +100,30 @@ class Pawn < Piece
       checked = troops["#{@name}_prom"].check(game, troops, @pos)
       troops["#{@name}_prom"].checked = checked
       still_around(game)
-      p @dead
-      gets
+    when :Rook
+      puts 'Promoted to a Rook!'
+      troops["#{@name}_prom"] = Rook.new(game, @colour, game.black[:Rook], @pos, "#{@name}_prom")
+      checked = troops["#{@name}_prom"].check(game, troops, @pos)
+      troops["#{@name}_prom"].checked = checked
+      still_around(game)
+    when :Knight
+      puts 'Promoted to a Knight!'
+      troops["#{@name}_prom"] = Knight.new(game, @colour, game.black[:Knight], @pos, "#{@name}_prom")
+      checked = troops["#{@name}_prom"].check(game, troops, @pos)
+      troops["#{@name}_prom"].checked = checked
+      still_around(game)
+    when :Bishop
+      puts 'Promoted to a Bishop!'
+      troops["#{@name}_prom"] = Queen.new(game, @colour, game.black[:Bishop], @pos, "#{@name}_prom")
+      checked = troops["#{@name}_prom"].check(game, troops, @pos)
+      troops["#{@name}_prom"].checked = checked
+      still_around(game)
     end
+    puts '3..'
+    sleep 1
+    puts '2..'
+    sleep 1
+    puts '1..'
+    sleep 1
   end
-
-
 end

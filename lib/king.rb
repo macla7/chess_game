@@ -82,7 +82,6 @@ class King < Piece
     troops.each do |key, value|
       ## FOUND THE PROBLEM 
       value.still_around(game)
-      #game.print_board if value.name == 'bp7'
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, troops, end_pos, @colour) == @enemy
           value.reverse_kill
