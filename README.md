@@ -27,3 +27,5 @@ final few minor issue with castling it seems, but the crux of it done. test it f
 Need to figure out king being able to take enemy that's checking it unprotected.
 
 pawn attacking forward too.. that some wrong stuff lol
+
+seemed to have broken my short castle..

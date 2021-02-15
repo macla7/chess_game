@@ -127,8 +127,8 @@ class Piece
     @pawn ? pawn_attack(game, troops, @pos) : possible_moves(game, troops)
 
     @possible.each do |post|
-      return 'black' if post == end_pos && colour == 'white'
-      return 'white' if post == end_pos && colour == 'black'
+      return 'black' if post == end_pos && colour == 'white' && @colour == 'black'
+      return 'white' if post == end_pos && colour == 'black' && @colour == 'white'
     end
     false
   end
