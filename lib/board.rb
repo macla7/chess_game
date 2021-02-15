@@ -24,7 +24,8 @@ class Chessboard
       King: "\u{265A}",
       Queen: "\u{265B}",
       Pawn: "\u{265F}"
-    }  
+    }
+    @check = ''
   end
 
   def allowed?(move)

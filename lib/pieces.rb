@@ -1,5 +1,6 @@
 class Piece
-  attr_reader :possible, :game, :pos, :checked, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead
+  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead
+  attr_accessor :checked
   def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
     @possible = []

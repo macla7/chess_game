@@ -95,7 +95,9 @@ class Pawn < Piece
     case piece
     when :Queen
       puts 'Promoted to a Queen!'
-      troops['neh'] = Queen.new(game, @colour, game.black[:Queen], @pos, 'neh')
+      troops["#{@name}_prom"] = Queen.new(game, @colour, game.black[:Queen], @pos, "#{@name}_prom")
+      checked = troops["#{@name}_prom"].check(game, troops, @pos)
+      troops["#{@name}_prom"].checked = checked
       still_around(game)
       p @dead
       gets
