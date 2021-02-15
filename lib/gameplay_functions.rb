@@ -79,35 +79,44 @@ end
 
 def pick_move(game, troops, piece, colour)
   clear_and_print(game, colour)
-  print "\n\n  Please pick from the following 
-  moves with the #{troops[piece].symbol} you selected..\n\n"
-  possible_x = []
-  possible_y = []
-  across = ''
-  up = ''
-  
-  troops[piece].possible_movements(game, troops).each do |move|
-    puts "\t#{convert_number(move[0])} - #{move[1]}"
-    possible_x.push(move[0])
-    possible_y.push(move[1])
-  end
-  loop do
-    print "\nLetter: "
-    across = gets.chomp
-    across && break if across == 'back'
+  up = 'help'
+  while up == 'help'
+    across = 'help'
+    while across == 'help'
+      print "\n\n  Please pick from the following 
+      moves with the #{troops[piece].symbol} you selected..\n\n"
+      possible_x = []
+      possible_y = []
+      across = ''
+      up = ''
+      
+      troops[piece].possible_movements(game, troops).each do |move|
+        puts "\t#{convert_number(move[0])} - #{move[1]}"
+        possible_x.push(move[0])
+        possible_y.push(move[1])
+      end
 
-    across = convert_letter(across)
-    across && break if possible_x.include?(across)
-  end
-  return 'back' if across == 'back'
+      loop do
+        print "\nLetter: "
+        across = gets.chomp
+        across && break if %w[back help].include?(across)
 
-  loop do
-    print "Number: "
-    up = gets.chomp
-    up && break if up == 'back'
+        across = convert_letter(across)
+        across && break if possible_x.include?(across)
+      end
+      help(game, colour) if across == 'help'
+    end
+    return 'back' if across == 'back'
 
-    up = up.to_i
-    up && break if troops[piece].possible.include?([across, up]) || troops[piece].possible.include?([across, up, 'castle-long']) || troops[piece].possible.include?([across, up, 'castle-short'])
+    loop do
+      print "Number: "
+      up = gets.chomp
+      up && break if %w[back help].include?(up)
+
+      up = up.to_i
+      up && break if troops[piece].possible.include?([across, up]) || troops[piece].possible.include?([across, up, 'castle-long']) || troops[piece].possible.include?([across, up, 'castle-short'])
+    end
+    help(game, colour) if up == 'help'
   end
   return 'back' if up == 'back'
 
