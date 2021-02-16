@@ -10,12 +10,12 @@ troops = {
   'br2' => Rook.new(game, 'black', game.black[:Rook], [8,8], 'br2'),
   'wk1' => Knight.new(game, 'white', game.white[:Knight], [2,1], 'wk1'),
   'wk2' => Knight.new(game, 'white', game.white[:Knight], [7,1], 'wk2'),
-  'bk1' => Knight.new(game, 'black', game.black[:Knight], [2,8], 'bk1'),
+  #'bk1' => Knight.new(game, 'black', game.black[:Knight], [2,8], 'bk1'),
   'bk2' => Knight.new(game, 'black', game.black[:Knight], [7,8], 'bk2'),
   'wp1' => Pawn.new(game, 'white', game.white[:Pawn], [1,2], 'wp1'),
   'wp2' => Pawn.new(game, 'white', game.white[:Pawn], [2,2], 'wp2'),
   'wp3' => Pawn.new(game, 'white', game.white[:Pawn], [3,2], 'wp3'),
-  'wp4' => Pawn.new(game, 'white', game.white[:Pawn], [4,2], 'wp4'),
+  #'wp4' => Pawn.new(game, 'white', game.white[:Pawn], [4,2], 'wp4'),
   'wp5' => Pawn.new(game, 'white', game.white[:Pawn], [5,2], 'wp5'),
   'wp6' => Pawn.new(game, 'white', game.white[:Pawn], [6,2], 'wp6'),
   'wp7' => Pawn.new(game, 'white', game.white[:Pawn], [7,2], 'wp7'),
@@ -29,8 +29,8 @@ troops = {
   'bp7' => Pawn.new(game, 'black', game.black[:Pawn], [7,7], 'bp7'),
   'bp8' => Pawn.new(game, 'black', game.black[:Pawn], [8,7], 'bp8'),
   'wb1' => Bishop.new(game, 'white', game.white[:Bishop], [3,1], 'wb1'),
-  'wb2' => Bishop.new(game, 'white', game.white[:Bishop], [6,1], 'wb2'),
-  'bb1' => Bishop.new(game, 'black', game.black[:Bishop], [3,8], 'bb1'),
+  'wb2' => Bishop.new(game, 'white', game.white[:Bishop], [6,5], 'wb2'),
+  #'bb1' => Bishop.new(game, 'black', game.black[:Bishop], [3,8], 'bb1'),
   'bb2' => Bishop.new(game, 'black', game.black[:Bishop], [6,8], 'bb2'),
   'wq' => Queen.new(game, 'white', game.white[:Queen], [4,1], 'wq'),
   'bq' => Queen.new(game, 'black', game.black[:Queen], [5,8], 'bq'),
@@ -46,12 +46,11 @@ loop do
     loop do
       piece = turn(troops, game, 'white', 'black')
       checker = false
-      troops.each { |key, value| checker = value if value.checked == true }
-      p "#{checker} is checking mataroo!" if checker !=false
+      troops.each { |key, value| checker = value if value.checked == 'black' }
       break unless checker
 
       if check_sequence(game, troops, 'black', checker, @pos) == 'check mate'
-        p 'White wins!'
+        p 'Checkmate, White wins!'
         game_over = true
         break
       end
@@ -62,7 +61,6 @@ loop do
       piece = turn(troops, game, 'black', 'white')
       checker = false
       troops.each { |key, value| checker = value if value.checked == true }
-      p "#{checker} is checking mataroo!" if checker !=false
       break unless checker
 
       if check_sequence(game, troops, 'white', checker, @pos) == 'check mate'

@@ -10,7 +10,7 @@ class Pawn < Piece
   end
 
   def possible_moves(game, troops, pos = @pos)
-    return if @dead
+    return [] if @dead
     potential_shifts = []
 
     piece_two_infront = game.board["#{@pos[0]}, #{@pos[1] + (2 * @j)}"]

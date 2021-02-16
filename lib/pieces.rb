@@ -89,6 +89,7 @@ class Piece
   end
 
   def place(game, end_pos, troops = nil)
+    return if @dead
     @last_killed = game.board["#{end_pos[0]}, #{end_pos[1]}"]
     @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '

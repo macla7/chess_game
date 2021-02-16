@@ -51,17 +51,30 @@ class Chessboard
     puts '  ---------------------------------------'
   end
 
+  # f me this is complicated....
   def check_mate?(game, troops, colour, checker)
-    check_mate = ''
+    available = []
     troops.each do |key, value|
       if key.match(/^b/)
-        value.possible_moves(game, troops).each do |post|
+        value.still_around(game)
+        p key
+        p value.possible_movements(game, troops)
+        value.possible_movements(game, troops).each do |post|
           value.place(game, post)
-          check_mate = false if !checker.check(game, troops)
+          available_spot = post
+          troops.each do |key2, value2|
+            if key2.match(/^w/)
+              value2.still_around(game)
+              available_spot = '' if value2.check(game, troops) == 'black'
+              value2.reverse_kill
+            end
+          end
+          available.push(available_spot)
           value.reverse_place(game, post)
         end
       end
     end
-    check_mate
+    return true if available.empty?
+    false
   end
 end
