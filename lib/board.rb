@@ -54,18 +54,24 @@ class Chessboard
   # f me this is complicated....
   def check_mate?(game, troops, colour, checker)
     available = []
+    if colour == 'black'
+      opponent = /^b/
+      our = /^w/
+    elsif colour == 'white'
+      opponent = /^w/
+      our = /^b/
+    end
+
     troops.each do |key, value|
-      if key.match(/^b/)
+      if key.match(opponent)
         value.still_around(game)
-        p key
-        p value.possible_movements(game, troops)
         value.possible_movements(game, troops).each do |post|
           value.place(game, post)
           available_spot = post
           troops.each do |key2, value2|
-            if key2.match(/^w/)
+            if key2.match(our)
               value2.still_around(game)
-              available_spot = '' if value2.check(game, troops) == 'black'
+              available_spot = '' if value2.check(game, troops) == colour
               value2.reverse_kill
             end
           end
