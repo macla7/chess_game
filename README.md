@@ -22,5 +22,3 @@ If so, look in saves dir and print list of saves
 if they want to load one then type in the name, if not then back (can't save as back lol)
 then in the help function, give ability to recieve save, which will ask for a name, or 'back', to not save.
 it'll then write a new file with the name and the troops object, as well as the game instance variables..
-
-Think I'm going to try and get troops into the Chessboard class, makes a lot more sense, that way we only have to pass the one thing to all the functions, and only have to save the one thing as well. Cause it'll hold the board, and also all the troops and their individuals variables.

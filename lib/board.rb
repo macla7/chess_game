@@ -7,7 +7,7 @@ require './lib/rook.rb'
 require './lib/pawn.rb'
 
 class Chessboard
-  attr_accessor :board, :black, :white, :turn_counter, :troops
+  attr_accessor :board, :black, :white, :turn_counter, :troops, :game_over
   def initialize
     @board = {}
     @turn_counter = 0
@@ -68,6 +68,7 @@ class Chessboard
     }
 
     @check = ''
+    @game_over = false
   end
 
   def allowed?(move)

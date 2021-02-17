@@ -5,19 +5,22 @@ def help(game, in_check = false, colour = '')
   print "  Call pieces by entering the 
   letter then the number of the 
   square they are in.\n\n"
-  print "  For example, the white knight 
-  starts in square b1. \t\n\n"
-  print "  MOVES: You will then be 
-  presented with a list of possible 
-  moves, move them to any of the 
-  listed squares.\n\n"
+  print "  For example, the white 
+  knight starts in square b1. \t\n\n"
+  print "  MOVES: You will then be
+  presented with a list of 
+  possible moves, move them to 
+  any of the listed squares.\n\n"
   print "  At any point, type 'back' to 
   pick another piece, or 'help' 
   to get these instructions again.\n\n"
 
+  puts "  SAVE: Type 'save' if you 
+  would like to save game, or..\n\n" if game.turn_counter.positive?
   print "  Press enter to continue..\n\n"
-  gets
+  saved = gets.chomp.to_s
   clear_and_print(game, colour, in_check)
+  saved
 end
 
 def touch_piece(game, colour, enemy, in_check)
@@ -39,20 +42,37 @@ def touch_piece(game, colour, enemy, in_check)
           across = convert_letter(across)
           across && break if [1,2,3,4,5,6,7,8].include?(across)
         end
-        help(game, colour, in_check) if across == 'help'
+        saved = help(game, colour, in_check) if across == 'help'
+        if saved == 'save'
+          save_game
+          game.game_over = true
+        end
+        break if saved == 'save'
       end
 
-      loop do
-        print "Number: "
-        up = gets.chomp
-        up && break if %w[back help].include?(up)
+      unless game.game_over == true
+        loop do
+          print "Number: "
+          up = gets.chomp
+          up && break if %w[back help].include?(up)
 
-        up = up.to_i
-        up && break if [1,2,3,4,5,6,7,8].include?(up)
+          up = up.to_i
+          up && break if [1,2,3,4,5,6,7,8].include?(up)
+        end
+        saved = help(game, colour, in_check) if up == 'help'
+        if saved == 'save'
+          save_game
+          game.game_over = true
+          break
+        end
       end
-      help(game, colour) if up == 'help'
+      break if game.game_over
     end
 
+    if game.game_over
+      piece = 'save'
+      break
+    end
     game.troops.each do |_key, value|
       if value.pos == [across, up]
         # FIX THESE TWO METHODS
@@ -156,17 +176,20 @@ def turn(game, colour, enemy, in_check = false)
   move = 'back'
   while move == 'back'
     piece = touch_piece(game, colour, enemy, in_check)
+    break if piece == 'save'
     move = pick_move(game, piece, colour, in_check)
   end
-  game.troops[piece].move_piece(game, move)
-  game.troops.each do |key, value|
-    value.still_around(game)
-    if key == 'bp4'
-      p value.dead
+  unless game.game_over
+    game.troops[piece].move_piece(game, move)
+    game.troops.each do |key, value|
+      value.still_around(game)
+      if key == 'bp4'
+        p value.dead
+      end
     end
+    clear_and_print(game, colour, in_check)
+    game.troops[piece]
   end
-  clear_and_print(game, colour, in_check)
-  game.troops[piece]
 end
 
 def check_sequence(game, colour, checker, old_pos)
@@ -190,4 +213,28 @@ def clear_and_print(game, colour, in_check = false)
   puts "\n  BLACK's TURN\n" if colour == 'black'
   puts "\n  You are in check!\n" if in_check == true
   print "\nPiece: "
+end
+
+def starting_game
+  system('clear')
+  game_type = ''
+  puts "  Hi, would you like to start 
+  a new game, or continue a 
+  saved one?\n\n"
+  puts "  Type 'start' or 'load save'
+  to make a choice.\n"
+  until game_type == 'start' || game_type == 'load save'
+    print "\nChoice: "
+    game_type = gets.chomp.to_s
+  end
+
+  if game_type == 'load save'
+    load_game
+  end
+end
+
+def load_game
+end
+
+def save_game
 end
