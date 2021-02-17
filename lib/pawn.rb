@@ -9,7 +9,7 @@ class Pawn < Piece
     @j = -1 if @colour == 'black'
   end
 
-  def possible_moves(game, troops, pos = @pos)
+  def possible_moves(game, pos = @pos)
     return [] if @dead
     potential_shifts = []
 
@@ -17,10 +17,10 @@ class Pawn < Piece
     piece_one_infront = game.board["#{@pos[0]}, #{@pos[1] + @j}"]
     potential_shifts = [[0, @j]] if piece_one_infront == ' '
     potential_shifts.push([0,2*@j]) if @move_counter.zero? && piece_two_infront == ' ' && piece_one_infront == ' '
-    pawn_attack(game, troops, pos, potential_shifts)
+    pawn_attack(game, pos, potential_shifts)
   end
 
-  def pawn_attack(game, troops, pos, potential_shifts = [])
+  def pawn_attack(game, pos, potential_shifts = [])
     return if @dead
     for i in [-1, 1]
       piece_type = game.board["#{@pos[0]+i}, #{@pos[1]+@j}"]
@@ -39,17 +39,17 @@ class Pawn < Piece
     @possible
   end
 
-  def move_piece(game, troops, end_pos)
+  def move_piece(game, end_pos)
     # order is super important here.
     @old_pos = @pos
-    super(game, troops, end_pos)
+    super(game, end_pos)
 
     if @old_pos[1]+(@j*2) == end_pos[1]
       game.board["#{@old_pos[0]}, #{@old_pos[1]+@j}"] = 'e'
     end
     en_passant_kill(game, end_pos)
     if promotion?
-      promote(game, troops)
+      promote(game)
     end
   end
 
@@ -81,7 +81,7 @@ class Pawn < Piece
     false
   end
 
-  def promote(game, troops)
+  def promote(game)
     puts '  What kind of piece would you like to promote to?'
     puts "  Please pick one of the following.\n"
     game.white.each do |key, _value|
@@ -96,27 +96,31 @@ class Pawn < Piece
     case piece
     when :Queen
       puts 'Promoted to a Queen!'
-      troops["#{@name}_prom"] = Queen.new(game, @colour, game.black[:Queen], @pos, "#{@name}_prom")
-      checked = troops["#{@name}_prom"].check(game, troops, @pos)
-      troops["#{@name}_prom"].checked = checked
+      game.troops["#{@name}_prom"] = Queen.new(game, @colour, game.black[:Queen], @pos, "#{@name}_prom") if @colour == 'black'
+      game.troops["#{@name}_prom"] = Queen.new(game, @colour, game.white[:Queen], @pos, "#{@name}_prom") if @colour == 'white'
+      checked = game.troops["#{@name}_prom"].check(game, @pos)
+      game.troops["#{@name}_prom"].checked = checked
       still_around(game)
     when :Rook
       puts 'Promoted to a Rook!'
-      troops["#{@name}_prom"] = Rook.new(game, @colour, game.black[:Rook], @pos, "#{@name}_prom")
-      checked = troops["#{@name}_prom"].check(game, troops, @pos)
-      troops["#{@name}_prom"].checked = checked
+      game.troops["#{@name}_prom"] = Rook.new(game, @colour, game.black[:Rook], @pos, "#{@name}_prom") if @colour == 'black'
+      game.troops["#{@name}_prom"] = Rook.new(game, @colour, game.white[:Rook], @pos, "#{@name}_prom") if @colour == 'white'
+      checked = game.troops["#{@name}_prom"].check(game, @pos)
+      game.troops["#{@name}_prom"].checked = checked
       still_around(game)
     when :Knight
       puts 'Promoted to a Knight!'
-      troops["#{@name}_prom"] = Knight.new(game, @colour, game.black[:Knight], @pos, "#{@name}_prom")
-      checked = troops["#{@name}_prom"].check(game, troops, @pos)
-      troops["#{@name}_prom"].checked = checked
+      game.troops["#{@name}_prom"] = Knight.new(game, @colour, game.black[:Knight], @pos, "#{@name}_prom") if @colour == 'black'
+      game.troops["#{@name}_prom"] = Knight.new(game, @colour, game.white[:Knight], @pos, "#{@name}_prom") if @colour == 'white'
+      checked = game.troops["#{@name}_prom"].check(game, @pos)
+      game.troops["#{@name}_prom"].checked = checked
       still_around(game)
     when :Bishop
       puts 'Promoted to a Bishop!'
-      troops["#{@name}_prom"] = Queen.new(game, @colour, game.black[:Bishop], @pos, "#{@name}_prom")
-      checked = troops["#{@name}_prom"].check(game, troops, @pos)
-      troops["#{@name}_prom"].checked = checked
+      game.troops["#{@name}_prom"] = Bishop.new(game, @colour, game.black[:Bishop], @pos, "#{@name}_prom") if @colour == 'black'
+      game.troops["#{@name}_prom"] = Bishop.new(game, @colour, game.white[:Bishop], @pos, "#{@name}_prom") if @colour == 'white'
+      checked = game.troops["#{@name}_prom"].check(game, @pos)
+      game.troops["#{@name}_prom"].checked = checked
       still_around(game)
     end
     puts '3..'

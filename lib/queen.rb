@@ -1,7 +1,7 @@
 require './lib/pieces.rb'
 
 class Queen < Piece
-  def possible_moves(game, troops, pos = @pos)
+  def possible_moves(game, pos = @pos)
     @possible = []
     return [] if @dead
     possible_ur_dl(game, pos)

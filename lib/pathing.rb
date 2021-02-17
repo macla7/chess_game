@@ -19,7 +19,7 @@ class Path
   end
 
   # heavily assissted / based off 'DorskFR' student's work. Guy's a genius.
-  def path_to(board, end_pos, chesspiece, troops)
+  def path_to(board, end_pos, chesspiece)
     visited = []
     queue = []
     visited.push(Node.new(@start_pos))
@@ -38,7 +38,7 @@ class Path
 
       # uses up the whole queue, every 'step' of the way. Processes the entire 'level' before, moving on to the next step.
       queue.each do |node|
-        chesspiece.possible_moves(board, troops, node.pos).each do |move|
+        chesspiece.possible_moves(board, node.pos).each do |move|
           visited.push(Node.new(move, node))
         end
         queue.shift

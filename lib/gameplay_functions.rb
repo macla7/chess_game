@@ -20,7 +20,7 @@ def help(game, in_check = false, colour = '')
   clear_and_print(game, colour, in_check)
 end
 
-def touch_piece(game, troops, colour, enemy, in_check)
+def touch_piece(game, colour, enemy, in_check)
   piece = ''
   loop do
     across = 'back'
@@ -53,13 +53,13 @@ def touch_piece(game, troops, colour, enemy, in_check)
       help(game, colour) if up == 'help'
     end
 
-    troops.each do |_key, value|
+    game.troops.each do |_key, value|
       if value.pos == [across, up]
         # FIX THESE TWO METHODS
         puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
         break if value.colour == enemy
-        puts "\nThis #{value.symbol} has no possible moves.." if value.possible_movements(game, troops).empty?
-        break if value.possible_movements(game, troops).empty?
+        puts "\nThis #{value.symbol} has no possible moves.." if value.possible_movements(game).empty?
+        break if value.possible_movements(game).empty?
         piece = value.name
         return piece
       end
@@ -76,20 +76,20 @@ def touch_piece(game, troops, colour, enemy, in_check)
   piece.to_s
 end
 
-def pick_move(game, troops, piece, colour, in_check)
+def pick_move(game, piece, colour, in_check)
   clear_and_print(game, colour, in_check)
   up = 'help'
   while up == 'help'
     across = 'help'
     while across == 'help'
       puts "\n\n  Please pick from the following 
-  moves with the #{troops[piece].symbol} you selected..\n\n"
+  moves with the #{game.troops[piece].symbol} you selected..\n\n"
       possible_x = []
       possible_y = []
       across = ''
       up = ''
       
-      troops[piece].possible_movements(game, troops).each do |move|
+      game.troops[piece].possible_movements(game).each do |move|
         puts "\t#{convert_number(move[0])} - #{move[1]}"
         possible_x.push(move[0])
         possible_y.push(move[1])
@@ -113,15 +113,15 @@ def pick_move(game, troops, piece, colour, in_check)
       up && break if %w[back help].include?(up)
 
       up = up.to_i
-      up && break if troops[piece].possible.include?([across, up]) || troops[piece].possible.include?([across, up, 'castle-long']) || troops[piece].possible.include?([across, up, 'castle-short'])
+      up && break if game.troops[piece].possible.include?([across, up]) || game.troops[piece].possible.include?([across, up, 'castle-long']) || game.troops[piece].possible.include?([across, up, 'castle-short'])
     end
     help(game, colour) if up == 'help'
   end
   return 'back' if up == 'back'
 
-  return [across, up] if troops[piece].possible_movements(game, troops).any?([across, up])
-  return [across, up] if troops[piece].possible_movements(game, troops).any?([across, up, 'castle-long'])
-  return [across, up] if troops[piece].possible_movements(game, troops).any?([across, up, 'castle-short'])
+  return [across, up] if game.troops[piece].possible_movements(game).any?([across, up])
+  return [across, up] if game.troops[piece].possible_movements(game).any?([across, up, 'castle-long'])
+  return [across, up] if game.troops[piece].possible_movements(game).any?([across, up, 'castle-short'])
 end
 
 def convert_letter(letter)
@@ -151,31 +151,31 @@ def convert_number(number)
   end
 end
 
-def turn(troops, game, colour, enemy, in_check = false)
+def turn(game, colour, enemy, in_check = false)
   piece = ' '
   move = 'back'
   while move == 'back'
-    piece = touch_piece(game, troops, colour, enemy, in_check)
-    move = pick_move(game, troops, piece, colour, in_check)
+    piece = touch_piece(game, colour, enemy, in_check)
+    move = pick_move(game, piece, colour, in_check)
   end
-  troops[piece].move_piece(game, troops, move)
-  troops.each do |key, value|
+  game.troops[piece].move_piece(game, move)
+  game.troops.each do |key, value|
     value.still_around(game)
     if key == 'bp4'
       p value.dead
     end
   end
   clear_and_print(game, colour, in_check)
-  troops[piece]
+  game.troops[piece]
 end
 
-def check_sequence(game, troops, colour, checker, old_pos)
-  if game.check_mate?(game, troops, colour, checker)
+def check_sequence(game, colour, checker, old_pos)
+  if game.check_mate?(colour, checker)
     return 'check mate'
   end
   loop do
-    last_piece = turn(troops, game, colour, checker.colour, true)
-    if !checker.check(game, troops, checker.pos)
+    last_piece = turn(game, colour, checker.colour, true)
+    if !checker.check(game, checker.pos)
       break
     else
       last_piece.reverse_place(game, last_piece.pos)
