@@ -1,3 +1,6 @@
+require 'yaml'
+require './lib/pieces.rb'
+
 def help(game, in_check = false, colour = '')
   system('clear')
   game.print_board
@@ -44,7 +47,7 @@ def touch_piece(game, colour, enemy, in_check)
         end
         saved = help(game, colour, in_check) if across == 'help'
         if saved == 'save'
-          save_game
+          save_game(game)
           game.game_over = true
         end
         break if saved == 'save'
@@ -61,7 +64,7 @@ def touch_piece(game, colour, enemy, in_check)
         end
         saved = help(game, colour, in_check) if up == 'help'
         if saved == 'save'
-          save_game
+          save_game(game)
           game.game_over = true
           break
         end
@@ -234,7 +237,20 @@ def starting_game
 end
 
 def load_game
+  filename = gets
+  saved = File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'r')
+  load_game = YAML.load(saved)
+  saved.close
+  load_game
 end
 
-def save_game
+def save_game(game)
+  filename = gets.chomp
+  return false unless filename
+  dump = YAML.dump(game)
+  File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'w') { |file| file.write dump }
+end
+
+def get_name
+
 end
