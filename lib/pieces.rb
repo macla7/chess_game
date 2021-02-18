@@ -3,6 +3,9 @@ class Piece
   attr_accessor :checked
   def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
+    still_around(game)
+    return if @dead == true
+    
     @possible = []
     @game = game
     @symbol = symbol
@@ -17,6 +20,7 @@ class Piece
     @enemy = 'black' if @colour == 'white'
     @enemy = 'white' if @colour == 'black'
     @dead = false
+
   end
 
   def possible_movements(game)
@@ -96,6 +100,9 @@ class Piece
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @symbol
     @move_counter += 1
     @pos = end_pos
+    game.troops.each do |_key, value|
+      value.still_around(game)
+    end
   end
 
   def reverse_place(game, end_pos)

@@ -22,3 +22,5 @@ If so, look in saves dir and print list of saves
 if they want to load one then type in the name, if not then back (can't save as back lol)
 then in the help function, give ability to recieve save, which will ask for a name, or 'back', to not save.
 it'll then write a new file with the name and the troops object, as well as the game instance variables..
+
+BUG: when load save, i can override alive pieces with dead pieces....

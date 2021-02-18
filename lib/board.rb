@@ -7,7 +7,7 @@ require './lib/rook.rb'
 require './lib/pawn.rb'
 
 class Chessboard
-  attr_accessor :board, :black, :white, :turn_counter, :troops, :game_over
+  attr_accessor :board, :black, :white, :turn_counter, :troops, :game_over, :whos_turn
   def initialize
     @board = {}
     @turn_counter = 0
@@ -66,7 +66,7 @@ class Chessboard
       'bk' => King.new(self, 'black', @black[:King], [4,8], 'bk'),
       'wk' => King.new(self, 'white', @white[:King], [5,1], 'wk')
     }
-
+    @whos_turn = 'white'
     @check = ''
     @game_over = false
   end

@@ -218,7 +218,7 @@ def clear_and_print(game, colour, in_check = false)
   print "\nPiece: "
 end
 
-def starting_game
+def starting_game(game)
   system('clear')
   game_type = ''
   puts "  Hi, would you like to start 
@@ -230,14 +230,11 @@ def starting_game
     print "\nChoice: "
     game_type = gets.chomp.to_s
   end
-
-  if game_type == 'load save'
-    load_game
-  end
+  game_type
 end
 
 def load_game
-  filename = gets
+  filename = gets.chomp
   saved = File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'r')
   load_game = YAML.load(saved)
   saved.close
