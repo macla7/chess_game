@@ -36,7 +36,8 @@ class Piece
         game.troops.each do |key, value|
           game.turn_counter += 1
           value.still_around(game)
-          unless key == 'bk' && key == 'wk'
+          p value.dead if key == 'bp6'
+          unless key == 'bk' || key == 'wk'
             if value.check(game, value.pos, @enemy) == @colour
               @are_we_in_check = true
             end
@@ -44,7 +45,9 @@ class Piece
           p "reversing kill #{key}" if game.turn_counter == value.died_when && key == 'bp6'
           value.reverse_kill if game.turn_counter == value.died_when
           game.turn_counter -= 1
+          p "bp6 #{game.troops['bp6'].dead} @#{key}" if @name == 'br2'
         end
+        p game.troops['bp6'].dead
         p post
         reverse_place(game, post)
         safe_moves.push(post) if !@are_we_in_check
@@ -115,10 +118,11 @@ class Piece
 
   def reverse_place(game, end_pos)
     return if @dead
-    @pos = last_spot
+    @pos = @last_spot
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
     @move_counter -= 1 if @move_counter.positive?
+    p
   end
 
   def moves(game, end_pos)
