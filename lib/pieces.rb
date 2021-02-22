@@ -24,6 +24,7 @@ class Piece
   end
 
   def possible_movements(game)
+    puts "  start of poss moves for #{@name}, were bp6 #{game.troops['bp6'].dead}"
     return [] if @dead
     # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
     @possible = possible_moves(game)
@@ -33,20 +34,25 @@ class Piece
       @possible.each do |post|
         place(game, post)
         game.troops.each do |key, value|
+          game.turn_counter += 1
           value.still_around(game)
           unless key == 'bk' && key == 'wk'
             if value.check(game, value.pos, @enemy) == @colour
               @are_we_in_check = true
             end
           end
+          p "reversing kill #{key}" if game.turn_counter == value.died_when && key == 'bp6'
           value.reverse_kill if game.turn_counter == value.died_when
+          game.turn_counter -= 1
         end
+        p post
         reverse_place(game, post)
         safe_moves.push(post) if !@are_we_in_check
         @possible = safe_moves
         @are_we_in_check = false
       end
     end
+    puts "  end of poss moves for #{@name}, were bp6 #{game.troops['bp6'].dead} \n\n"
     @possible
   end
 
@@ -65,6 +71,8 @@ class Piece
       value.still_around(game)
     end
     game.turn_counter += 1
+    p game.turn_counter
+    gets
     @checked = check(game, end_pos)
   end
 
@@ -106,6 +114,7 @@ class Piece
   end
 
   def reverse_place(game, end_pos)
+    return if @dead
     @pos = last_spot
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed

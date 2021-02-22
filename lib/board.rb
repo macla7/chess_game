@@ -105,22 +105,35 @@ class Chessboard
       our = /^b/
     end
 
+    p "start of check mate? #{@troops['bp6'].dead}"
     @troops.each do |key, value|
       if key.match(opponent)
+        @turn_counter += 1
+        p "start of checkmate here #{@troops['bp6'].dead}, #{key}"
         value.still_around(self)
-        value.possible_movements(self).each do |post|
+        poss = value.possible_movements(self)
+        p poss
+        poss.each do |post|
           value.place(self, post)
+          puts "#{key} is put at #{post}"
           available_spot = post
           @troops.each do |key2, value2|
             if key2.match(our)
+              @turn_counter += 1
+              p "bp6 in deep deeep loop #{@troops['bp6'].dead}"
+              p @turn_counter
               value2.still_around(self)
               available_spot = '' if value2.check(self) == colour
               value2.reverse_kill
+              @turn_counter -= 1
             end
           end
+          puts 'nothing to see here'
           available.push(available_spot)
           value.reverse_place(self, post)
+          @turn_counter -= 1
         end
+        puts "    end of checkmate here #{@troops['bp6'].dead}, #{key}\n\n"
       end
     end
     return true if available.empty?

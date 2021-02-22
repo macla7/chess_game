@@ -39,6 +39,7 @@ def touch_piece(game, colour, enemy, in_check)
         clear_and_print(game, colour, in_check)
         loop do
           print "\nLetter: "
+          p "in touch piece #{game.troops['bp6'].dead}"
           across = gets.chomp
           across && break if %w[back help].include?(across)
 
@@ -199,6 +200,7 @@ def check_sequence(game, colour, checker, old_pos)
   if game.check_mate?(colour, checker)
     return 'check mate'
   end
+  p "in check mate? #{game.troops['bp6'].dead}"
   loop do
     last_piece = turn(game, colour, checker.colour, true)
     if !checker.check(game, checker.pos)
@@ -238,6 +240,12 @@ def load_game
   saved = File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'r')
   load_game = YAML.load(saved)
   saved.close
+  load_game.troops.each do |key, value|
+    value.still_around(load_game)
+  end
+  p "in load #{load_game.troops['bp6'].dead}"
+  p load_game.turn_counter
+  gets
   load_game
 end
 
