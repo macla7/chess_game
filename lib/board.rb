@@ -105,35 +105,36 @@ class Chessboard
       our = /^b/
     end
 
-    p "start of check mate? #{@troops['bp6'].dead}"
     @troops.each do |key, value|
       if key.match(opponent)
+        puts "0.11 #{@troops['bq'].dead} is bq" if key == 'bk'
         @turn_counter += 1
-        p "start of checkmate here #{@troops['bp6'].dead}, #{key}"
         value.still_around(self)
+        puts "0.22 #{@troops['bq'].dead} is bq" if key == 'bk'
         poss = value.possible_movements(self)
-        p poss
+        puts "0.33 #{@troops['bq'].dead} is bq" if key == 'bk'
+        p poss if key == 'bk'
         poss.each do |post|
           value.place(self, post)
-          puts "#{key} is put at #{post}"
           available_spot = post
+          puts "1 #{game.troops['bq'].dead} is bq" if key == 'bk'
           @troops.each do |key2, value2|
-            if key2.match(our)
-              @turn_counter += 1
-              p "bp6 in deep deeep loop #{@troops['bp6'].dead}"
-              p @turn_counter
-              value2.still_around(self)
-              available_spot = '' if value2.check(self) == colour
-              value2.reverse_kill
-              @turn_counter -= 1
+            unless key2 == 'wk' || key2 == 'bk'
+              if key2.match(our)
+                @turn_counter += 1
+                value2.still_around(self)
+                available_spot = '' if value2.check(self) == colour
+                value2.reverse_kill
+                @turn_counter -= 1
+              end
             end
           end
-          puts 'nothing to see here'
+          puts "2 #{game.troops['bq'].dead} is bq" if key == 'bk'
           available.push(available_spot)
           value.reverse_place(self, post)
           @turn_counter -= 1
+          puts "3 #{game.troops['bq'].dead} is bq" if key == 'bk'
         end
-        puts "    end of checkmate here #{@troops['bp6'].dead}, #{key}\n\n"
       end
     end
     return true if available.empty?

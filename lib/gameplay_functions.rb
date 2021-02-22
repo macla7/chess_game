@@ -39,7 +39,6 @@ def touch_piece(game, colour, enemy, in_check)
         clear_and_print(game, colour, in_check)
         loop do
           print "\nLetter: "
-          p "in touch piece #{game.troops['bp6'].dead}"
           across = gets.chomp
           across && break if %w[back help].include?(across)
 
@@ -78,6 +77,7 @@ def touch_piece(game, colour, enemy, in_check)
       break
     end
     game.troops.each do |_key, value|
+      puts "killed" if value.dead
       if value.pos == [across, up]
         # FIX THESE TWO METHODS
         puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
@@ -200,7 +200,7 @@ def check_sequence(game, colour, checker, old_pos)
   if game.check_mate?(colour, checker)
     return 'check mate'
   end
-  p "in check mate? #{game.troops['bp6'].dead}"
+  p " how we doing #{game.troops['bq'].dead}"
   loop do
     last_piece = turn(game, colour, checker.colour, true)
     if !checker.check(game, checker.pos)

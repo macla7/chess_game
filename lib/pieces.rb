@@ -24,7 +24,6 @@ class Piece
   end
 
   def possible_movements(game)
-    puts "  start of poss moves for #{@name}, were bp6 #{game.troops['bp6'].dead}"
     return [] if @dead
     # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
     @possible = possible_moves(game)
@@ -36,26 +35,20 @@ class Piece
         game.troops.each do |key, value|
           game.turn_counter += 1
           value.still_around(game)
-          p value.dead if key == 'bp6'
           unless key == 'bk' || key == 'wk'
             if value.check(game, value.pos, @enemy) == @colour
               @are_we_in_check = true
             end
           end
-          p "reversing kill #{key}" if game.turn_counter == value.died_when && key == 'bp6'
           value.reverse_kill if game.turn_counter == value.died_when
           game.turn_counter -= 1
-          p "bp6 #{game.troops['bp6'].dead} @#{key}" if @name == 'br2'
         end
-        p game.troops['bp6'].dead
-        p post
         reverse_place(game, post)
         safe_moves.push(post) if !@are_we_in_check
         @possible = safe_moves
         @are_we_in_check = false
       end
     end
-    puts "  end of poss moves for #{@name}, were bp6 #{game.troops['bp6'].dead} \n\n"
     @possible
   end
 
@@ -145,7 +138,7 @@ class Piece
   end
 
   def ability_to_check(game, end_pos, colour)
-    @pawn ? pawn_attack(game, @pos) : possible_moves(game,)
+    @pawn ? pawn_attack(game, @pos) : possible_moves(game)
 
     @possible.each do |post|
       return 'black' if post == end_pos && colour == 'white' && @colour == 'black'
@@ -166,6 +159,7 @@ class Piece
   end
 
   def reverse_kill
+    #should have if including -->  @died_when == game.turn_counter && 
     if @dead
       @dead = false
       @pos = @died_at
