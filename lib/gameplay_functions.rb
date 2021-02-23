@@ -45,12 +45,14 @@ def touch_piece(game, colour, enemy, in_check)
           across = convert_letter(across)
           across && break if [1,2,3,4,5,6,7,8].include?(across)
         end
+        saved = ''
         saved = help(game, colour, in_check) if across == 'help'
+        choice = ''
         if saved == 'save'
-          save_game(game)
-          game.game_over = true
+          choice = save_game(game)
+          game.game_over = true unless choice == 'back'
         end
-        break if saved == 'save'
+        break if saved == 'save' && choice != 'back'
       end
 
       unless game.game_over == true
@@ -62,12 +64,14 @@ def touch_piece(game, colour, enemy, in_check)
           up = up.to_i
           up && break if [1,2,3,4,5,6,7,8].include?(up)
         end
+        saved = ''
         saved = help(game, colour, in_check) if up == 'help'
+        choice = ''
         if saved == 'save'
-          save_game(game)
-          game.game_over = true
-          break
+          choice = save_game(game)
+          game.game_over = true unless choice == 'back'
         end
+        break if saved == 'save' && choice != 'back'
       end
       break if game.game_over
     end
@@ -235,7 +239,7 @@ def starting_game(game)
 end
 
 def load_game
-  filename = gets.chomp
+  filename = choose_game
   saved = File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'r')
   load_game = YAML.load(saved)
   saved.close
@@ -245,8 +249,40 @@ def load_game
   load_game
 end
 
+def choose_game
+  puts "\n  Please pick from the following 
+  saves by typing the name:\n\n"
+  print "  Name:\t\t\tDate Saved:"
+  files = Dir.glob('saved/*').map { |file| file[(file.index('/') + 1)...(file.index('.'))] }
+  files.each do |file|
+    mtime = File.mtime(File.join(Dir.pwd, "/saved/#{file}.yaml")).to_s
+    mtime = mtime[0..18]
+    print "\n   #{file}\t "
+    print "\t " if file.length < 5
+    print "\t " if file.length < 11
+    print mtime
+  end
+  begin
+    print "\nChoice: "
+    filename = gets.chomp
+    raise "  #{filename} does not exist." unless files.include?(filename)
+    puts "  #{filename} loaded.."
+    puts "\n  /saved/#{filename}.yaml"
+    rescue StandardError => e  
+    puts e 
+    retry
+  end
+  filename
+end
+
 def save_game(game)
+  puts "\n  What name would you like to
+  give your save?"
+  puts "\n  Type 'back' if you wish to 
+  return to the game."
+  print "\nSave: "
   filename = gets.chomp
+  return filename if filename == 'back'
   return false unless filename
   dump = YAML.dump(game)
   File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'w') { |file| file.write dump }

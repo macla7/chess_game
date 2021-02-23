@@ -32,7 +32,6 @@ class Piece
       @are_we_in_check = false
       @possible.each do |post|
         place(game, post)
-        p game.troops['br2'].dead
         game.troops.each do |key, value|
           value.still_around(game)
           unless key == 'bk' || key == 'wk'
@@ -41,9 +40,6 @@ class Piece
             end
           end
           value.reverse_kill if game.turn_counter == value.died_when
-          p "br2 is #{game.troops['br2'].dead}" if key == 'br2'
-          p "killed at #{game.troops['br2'].died_when}" if key == 'br2' && value.dead
-          p game.turn_counter if key == 'br2'
         end
         reverse_place(game, post)
         safe_moves.push(post) if !@are_we_in_check
@@ -74,7 +70,6 @@ class Piece
         puts key
       end
     end
-    gets
     @checked = check(game, end_pos)
   end
 

@@ -24,3 +24,5 @@ then in the help function, give ability to recieve save, which will ask for a na
 it'll then write a new file with the name and the troops object, as well as the game instance variables..
 
 BUG: when load save, i can override alive pieces with dead pieces....
+Need to figure out replacing spaces in a save, with '_'
+need to figure out deleting saves
