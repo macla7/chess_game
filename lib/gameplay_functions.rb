@@ -240,6 +240,7 @@ end
 
 def load_game
   filename = choose_game
+  return Chessboard.new if filename == 'back'
   saved = File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'r')
   load_game = YAML.load(saved)
   saved.close
@@ -254,18 +255,22 @@ def choose_game
   saves by typing the name:\n\n"
   print "  Name:\t\t\tDate Saved:"
   files = Dir.glob('saved/*').map { |file| file[(file.index('/') + 1)...(file.index('.'))] }
+  files = files.sort
   files.each do |file|
     mtime = File.mtime(File.join(Dir.pwd, "/saved/#{file}.yaml")).to_s
     mtime = mtime[0..18]
-    print "\n   #{file}\t "
+    print "\n   #{file.gsub('_', ' ')}\t "
     print "\t " if file.length < 5
-    print "\t " if file.length < 11
+    print "\t " if file.length < 12
     print mtime
   end
   begin
-    print "\nChoice: "
+    print "\n\nChoice: "
     filename = gets.chomp
-    raise "  #{filename} does not exist." unless files.include?(filename)
+    return filename if filename == 'back'
+    filename.gsub!(' ', '_')
+    p files
+    raise "  '#{filename.gsub('_', ' ')}' does not exist." unless files.include?(filename)
     puts "  #{filename} loaded.."
     puts "\n  /saved/#{filename}.yaml"
     rescue StandardError => e  
@@ -283,6 +288,7 @@ def save_game(game)
   print "\nSave: "
   filename = gets.chomp
   return filename if filename == 'back'
+  filename.gsub!(' ', '_')
   return false unless filename
   dump = YAML.dump(game)
   File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'w') { |file| file.write dump }
