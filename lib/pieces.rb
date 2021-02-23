@@ -65,11 +65,6 @@ class Piece
       value.still_around(game)
     end
     game.turn_counter += 1
-    game.troops.each do |key, value|
-      if value.dead == true
-        puts key
-      end
-    end
     @checked = check(game, end_pos)
   end
 
@@ -127,7 +122,7 @@ class Piece
 
   def check(game, pos = @pos, colour = @colour)
     @checked = false if @dead
-    return if @dead
+    return false if @dead
 
     possible_moves(game, pos)
     @possible.each do |post|

@@ -12,7 +12,6 @@ class King < Piece
     castling_short(game, pos)
     potential_pos(pos).each do |post|
       piece_type = game.board["#{post[0]}, #{post[1]}"]
-      p post
       if game.allowed?(post) && !cant_move_into_check(game, post) && !neighbour_king(game, post)
         @possible.push(post) if !game.black.value?(piece_type) && @colour == 'black'
         @possible.push(post) if !game.white.value?(piece_type) && @colour == 'white'
@@ -78,14 +77,8 @@ class King < Piece
 
   def cant_move_into_check(game, end_pos)
     # inefficient, but because of pawns essentially HAVE to, move the king and test all possible moves again..
-    p game.troops['bq'].dead
-    ## DIES HERE
     place(game, end_pos)
-    p end_pos
-    p game.troops['bq'].dead
-    p game.turn_counter
     game.troops.each do |key, value|
-      puts "#{key} is dead at start #{value.dead}" if key == 'bq'
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, end_pos, @colour) == @enemy
           value.reverse_kill if value.died_when == game.turn_counter
@@ -93,20 +86,11 @@ class King < Piece
           return true
         end
       end
-      puts "#{key} is dead at 0.3 #{value.dead}" if key == 'bq'
-      p game.turn_counter
       value.reverse_kill if value.died_when == game.turn_counter
-      puts "#{key} is dead at 0.4 #{value.dead}" if key == 'bq'
     end
     reverse_place(game, end_pos)
-    puts " is dead at 0.6 #{game.troops['bq'].dead}"
     false
   end
-
-  #def take_checker(game, troops)
-  #  troops.each do |key, value|
-  #  end
-  #end
 
   def potential_pos(pos)
     potential_shifts = [[0, 1],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1],[-1, 0],[-1, 1]]

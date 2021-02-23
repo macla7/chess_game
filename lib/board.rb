@@ -95,7 +95,7 @@ class Chessboard
   end
 
   # f me this is complicated....
-  def check_mate?(colour, checker)
+  def check_mate?(colour)
     available = []
     if colour == 'black'
       opponent = /^b/

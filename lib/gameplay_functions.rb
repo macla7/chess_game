@@ -200,7 +200,7 @@ def turn(game, colour, enemy, in_check = false)
 end
 
 def check_sequence(game, colour, checker, old_pos)
-  if game.check_mate?(colour, checker)
+  if game.check_mate?(colour)
     return 'check mate'
   end
   p " how we doing #{game.troops['bq'].dead}"
@@ -214,7 +214,7 @@ def check_sequence(game, colour, checker, old_pos)
   end
 end
 
-def clear_and_print(game, colour, in_check = false)
+def clear_and_print(game, colour = nil, in_check = false)
   system('clear')
   game.print_board
   puts "\n  WHITE'S TURN\n" if colour == 'white'
@@ -292,8 +292,4 @@ def save_game(game)
   return false unless filename
   dump = YAML.dump(game)
   File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'w') { |file| file.write dump }
-end
-
-def get_name
-
 end
