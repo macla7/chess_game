@@ -77,7 +77,6 @@ def touch_piece(game, colour, enemy, in_check)
       break
     end
     game.troops.each do |_key, value|
-      puts "killed" if value.dead
       if value.pos == [across, up]
         # FIX THESE TWO METHODS
         puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
@@ -243,9 +242,6 @@ def load_game
   load_game.troops.each do |key, value|
     value.still_around(load_game)
   end
-  p "in load #{load_game.troops['bp6'].dead}"
-  p load_game.turn_counter
-  gets
   load_game
 end
 

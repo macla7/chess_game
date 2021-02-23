@@ -107,17 +107,12 @@ class Chessboard
 
     @troops.each do |key, value|
       if key.match(opponent)
-        puts "0.11 #{@troops['bq'].dead} is bq" if key == 'bk'
         @turn_counter += 1
         value.still_around(self)
-        puts "0.22 #{@troops['bq'].dead} is bq" if key == 'bk'
         poss = value.possible_movements(self)
-        puts "0.33 #{@troops['bq'].dead} is bq" if key == 'bk'
-        p poss if key == 'bk'
         poss.each do |post|
           value.place(self, post)
           available_spot = post
-          puts "1 #{game.troops['bq'].dead} is bq" if key == 'bk'
           @troops.each do |key2, value2|
             unless key2 == 'wk' || key2 == 'bk'
               if key2.match(our)
@@ -129,11 +124,9 @@ class Chessboard
               end
             end
           end
-          puts "2 #{game.troops['bq'].dead} is bq" if key == 'bk'
           available.push(available_spot)
           value.reverse_place(self, post)
           @turn_counter -= 1
-          puts "3 #{game.troops['bq'].dead} is bq" if key == 'bk'
         end
       end
     end
