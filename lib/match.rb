@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/gameplay_functions.rb'
 require './lib/board.rb'
 
@@ -7,8 +9,11 @@ game = choice == 'load save' ? load_game : Chessboard.new
 help(game)
 game_over = false
 
+# Game Loop
 loop do
+  # White's sequence
   if !game_over && game.whos_turn != 'black' && game.whos_turn != 'white in check'
+    # White's turn
     loop do
       if game.whos_turn == 'white'
         turn(game, 'white', 'black')
@@ -22,6 +27,7 @@ loop do
         break
       end
 
+      # Black's turn in check
       game.whos_turn = 'black in check'
       if check_sequence(game, 'black', checker, @pos) == 'check mate'
         p 'Checkmate, White wins!'
@@ -32,7 +38,9 @@ loop do
     end
   end
 
+  # Black's Sequence
   if !game_over && game.whos_turn != 'white' && game.whos_turn != 'black in check'
+    # Black's turn
     loop do
       if game.whos_turn == 'black'
         turn(game, 'black', 'white')
@@ -46,6 +54,7 @@ loop do
         break
       end
 
+      # White's turn in check
       game.whos_turn = 'white in check'
       if check_sequence(game, 'white', checker, @pos) == 'check mate'
         p 'Checkmate, Black wins!'

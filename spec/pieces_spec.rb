@@ -15,7 +15,7 @@ describe Chessboard do
         expect(subject.troops['bk2'].check(subject)).to eql 'white'
       end
 
-      it "return false if black checker killed" do
+      it 'return false if black checker killed' do
         subject.troops['bk2'].place(subject, [6, 3])
         subject.troops['wp7'].move_piece(subject, [6, 3])
         subject.print_board
@@ -23,7 +23,7 @@ describe Chessboard do
         expect(subject.troops['bk2'].check(subject)).to eql false
       end
 
-      it "return false if white king moves out of check" do
+      it 'return false if white king moves out of check' do
         subject.troops['bk2'].place(subject, [6, 3])
         subject.board['5, 2'] = ' '
         subject.troops['wp5'].still_around(subject)

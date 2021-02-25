@@ -18,4 +18,3 @@ describe Chessboard do
     end
   end
 end
-

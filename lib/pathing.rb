@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+# THIS IS NOT USED IN THE GAME.
+# This is for finding the shortest possible path, for a given piece, to a particular tile.
+
 # Nodes for the path
 # pos & parent node
 class Node
@@ -61,8 +65,8 @@ class Path
       print "\nThe @steps are:\n Start: #{@start_pos}"
       i = 1
       path_nodes.each do |node|
-       print "\nStep #{i}: #{node}"
-       i+=1
+        print "\nStep #{i}: #{node}"
+        i += 1
       end
       print "\n\n"
     end

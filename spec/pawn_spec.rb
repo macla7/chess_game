@@ -30,7 +30,7 @@ describe Chessboard do
       describe 'promote' do
         it "promote to queen if ':Queen' typed in" do
           subject.board['5, 8'] = ' '
-          subject.troops['wp5'].place(subject, [5,7])
+          subject.troops['wp5'].place(subject, [5, 7])
           subject.troops['wp5'].move_piece(subject, [5, 8], :Queen)
           subject.print_board
           puts "\n"
@@ -40,7 +40,7 @@ describe Chessboard do
       describe 'promote' do
         it "promote to knight if ':Knight' typed in" do
           subject.board['5, 8'] = ' '
-          subject.troops['wp5'].place(subject, [5,7])
+          subject.troops['wp5'].place(subject, [5, 7])
           subject.troops['wp5'].move_piece(subject, [5, 8], :Knight)
           subject.print_board
           puts "\n"
@@ -48,9 +48,9 @@ describe Chessboard do
         end
       end
       describe 'promote' do
-        it "Queen should check instantly black king" do
+        it 'Queen should check instantly black king' do
           subject.board['5, 8'] = ' '
-          subject.troops['wp5'].place(subject, [5,7])
+          subject.troops['wp5'].place(subject, [5, 7])
           subject.troops['wp5'].move_piece(subject, [5, 8], :Queen)
           subject.print_board
           puts "\n"

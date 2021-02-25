@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yaml'
 require './lib/pieces.rb'
 
@@ -18,8 +20,10 @@ def help(game, in_check = false, colour = '')
   pick another piece, or 'help' 
   to get these instructions again.\n\n"
 
-  puts "  SAVE: Type 'save' if you 
-  would like to save game, or..\n\n" if game.turn_counter.positive?
+  if game.turn_counter.positive?
+    puts "  SAVE: Type 'save' if you 
+    would like to save game, or..\n\n"
+  end
   print "  Press enter to continue..\n\n"
   saved = gets.chomp.to_s
   clear_and_print(game, colour, in_check)
@@ -33,9 +37,11 @@ def touch_piece(game, colour, enemy, in_check)
     up = 'back'
     clear_and_print(game, colour, in_check)
     while up == 'back' || up == 'help'
+
       clear_and_print(game, colour, in_check)
       across = 'back'
       while across == 'back' || across == 'help'
+
         clear_and_print(game, colour, in_check)
         loop do
           print "\nLetter: "
@@ -51,13 +57,14 @@ def touch_piece(game, colour, enemy, in_check)
         if saved == 'save'
           choice = save_game(game)
           game.game_over = true unless choice == 'back'
+
         end
         break if saved == 'save' && choice != 'back'
       end
 
       unless game.game_over == true
         loop do
-          print "Number: "
+          print 'Number: '
           up = gets.chomp
           up && break if %w[back help].include?(up)
 
@@ -70,6 +77,7 @@ def touch_piece(game, colour, enemy, in_check)
         if saved == 'save'
           choice = save_game(game)
           game.game_over = true unless choice == 'back'
+
         end
         break if saved == 'save' && choice != 'back'
       end
@@ -82,16 +90,18 @@ def touch_piece(game, colour, enemy, in_check)
     end
     game.troops.each do |_key, value|
       if value.pos == [across, up]
-        # FIX THESE TWO METHODS
         puts "\nYou can't move #{enemy}'s pieces!" if value.colour == enemy
         break if value.colour == enemy
+
         puts "\nThis #{value.symbol} has no possible moves.." if value.possible_movements(game).empty?
         break if value.possible_movements(game).empty?
+
         piece = value.name
         return piece
       end
     end
     break if piece != ''
+
     puts "\nTry again Sir..\n\n"
     puts '3..'
     sleep 1
@@ -135,7 +145,7 @@ def pick_move(game, piece, colour, in_check)
     return 'back' if across == 'back'
 
     loop do
-      print "Number: "
+      print 'Number: '
       up = gets.chomp
       up && break if %w[back help].include?(up)
 
@@ -184,6 +194,7 @@ def turn(game, colour, enemy, in_check = false)
   while move == 'back'
     piece = touch_piece(game, colour, enemy, in_check)
     break if piece == 'save'
+
     move = pick_move(game, piece, colour, in_check)
   end
   unless game.game_over
@@ -228,6 +239,7 @@ def starting_game(game)
   puts "  Type 'start' or 'load save'
   to make a choice.\n"
   until game_type == 'start' || game_type == 'load save'
+
     print "\nChoice: "
     game_type = gets.chomp.to_s
   end
@@ -237,10 +249,11 @@ end
 def load_game
   filename = choose_game
   return Chessboard.new if filename == 'back'
+
   saved = File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'r')
-  load_game = YAML.load(saved)
+  load_game = YAML.safe_load(saved)
   saved.close
-  load_game.troops.each do |key, value|
+  load_game.troops.each do |_key, value|
     value.still_around(load_game)
   end
   load_game
@@ -264,13 +277,15 @@ def choose_game
     print "\n\nChoice: "
     filename = gets.chomp
     return filename if filename == 'back'
+
     filename.gsub!(' ', '_')
     p files
     raise "  '#{filename.gsub('_', ' ')}' does not exist." unless files.include?(filename)
+
     puts "  #{filename} loaded.."
     puts "\n  /saved/#{filename}.yaml"
-    rescue StandardError => e  
-    puts e 
+  rescue StandardError => e
+    puts e
     retry
   end
   filename
@@ -284,8 +299,10 @@ def save_game(game)
   print "\nSave: "
   filename = gets.chomp
   return filename if filename == 'back'
+
   filename.gsub!(' ', '_')
   return false unless filename
+
   dump = YAML.dump(game)
   File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'w') { |file| file.write dump }
 end

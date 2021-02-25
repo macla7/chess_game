@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require './lib/pieces.rb'
 
+# Defines king's moves, including castling and not going near enemy king.
 class King < Piece
   def initialize(game, colour, symbol, pos, name)
     super(game, colour, symbol, pos, name)
@@ -78,7 +81,6 @@ class King < Piece
   def cant_move_into_check(game, end_pos)
     # inefficient, but because of pawns essentially HAVE to, move the king and test all possible moves again..
     place(game, end_pos)
-    #p "#{@name} is placed at #{end_pos}"
     game.troops.each do |key, value|
       if key != 'wk' && key != 'bk'
         if value.ability_to_check(game, end_pos, @colour) == @enemy

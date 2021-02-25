@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require './lib/pieces.rb'
 
+# Pawns moves, including en passant, promotions and diagonal attack only
 class Pawn < Piece
   attr_reader :last_killed
   def initialize(game, colour, symbol, pos, name)
@@ -11,8 +14,8 @@ class Pawn < Piece
 
   def possible_moves(game, pos = @pos)
     return [] if @dead
-    potential_shifts = []
 
+    potential_shifts = []
     piece_two_infront = game.board["#{@pos[0]}, #{@pos[1] + (2 * @j)}"]
     piece_one_infront = game.board["#{@pos[0]}, #{@pos[1] + @j}"]
     potential_shifts = [[0, @j]] if piece_one_infront == ' '
@@ -22,6 +25,7 @@ class Pawn < Piece
 
   def pawn_attack(game, pos, potential_shifts = [])
     return if @dead
+
     for i in [-1, 1]
       piece_type = game.board["#{@pos[0]+i}, #{@pos[1]+@j}"]
       b = [i, @j]
@@ -81,6 +85,7 @@ class Pawn < Piece
 
   def promotion?
     return true if @pos[1] == 1 || @pos[1] == 8
+
     false
   end
 

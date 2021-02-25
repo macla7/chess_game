@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/pieces.rb'
 require './lib/king.rb'
 require './lib/queen.rb'
@@ -6,7 +8,8 @@ require './lib/new_knight.rb'
 require './lib/rook.rb'
 require './lib/pawn.rb'
 
-class Chessboard
+# The chessboard (grid) the pieces move on.
+class Chessboard 
   attr_accessor :board, :black, :white, :turn_counter, :troops, :game_over, :whos_turn
   def initialize
     @board = {}
@@ -33,38 +36,38 @@ class Chessboard
       Pawn: "\u{265F}"
     }
     @troops = {
-      'wr1' => Rook.new(self, 'white', @white[:Rook], [1,1], 'wr1'),
-      'wr2' => Rook.new(self, 'white', @white[:Rook], [8,1], 'wr2'),
-      'br1' => Rook.new(self, 'black', @black[:Rook], [1,8], 'br1'),
-      'br2' => Rook.new(self, 'black', @black[:Rook], [8,8], 'br2'),
-      'wk1' => Knight.new(self, 'white', @white[:Knight], [2,1], 'wk1'),
-      'wk2' => Knight.new(self, 'white', @white[:Knight], [7,1], 'wk2'),
-      'bk1' => Knight.new(self, 'black', @black[:Knight], [2,8], 'bk1'),
-      'bk2' => Knight.new(self, 'black', @black[:Knight], [7,8], 'bk2'),
-      'wp1' => Pawn.new(self, 'white', @white[:Pawn], [1,2], 'wp1'),
-      'wp2' => Pawn.new(self, 'white', @white[:Pawn], [2,2], 'wp2'),
-      'wp3' => Pawn.new(self, 'white', @white[:Pawn], [3,2], 'wp3'),
-      'wp4' => Pawn.new(self, 'white', @white[:Pawn], [4,2], 'wp4'),
-      'wp5' => Pawn.new(self, 'white', @white[:Pawn], [5,2], 'wp5'),
-      'wp6' => Pawn.new(self, 'white', @white[:Pawn], [6,2], 'wp6'),
-      'wp7' => Pawn.new(self, 'white', @white[:Pawn], [7,2], 'wp7'),
-      'wp8' => Pawn.new(self, 'white', @white[:Pawn], [8,2], 'wp8'),
-      'bp1' => Pawn.new(self, 'black', @black[:Pawn], [1,7], 'bp1'),
-      'bp2' => Pawn.new(self, 'black', @black[:Pawn], [2,7], 'bp2'),
-      'bp3' => Pawn.new(self, 'black', @black[:Pawn], [3,7], 'bp3'),
-      'bp4' => Pawn.new(self, 'black', @black[:Pawn], [4,7], 'bp4'),
-      'bp5' => Pawn.new(self, 'black', @black[:Pawn], [5,7], 'bp5'),
-      'bp6' => Pawn.new(self, 'black', @black[:Pawn], [6,7], 'bp6'),
-      'bp7' => Pawn.new(self, 'black', @black[:Pawn], [7,7], 'bp7'),
-      'bp8' => Pawn.new(self, 'black', @black[:Pawn], [8,7], 'bp8'),
-      'wb1' => Bishop.new(self, 'white', @white[:Bishop], [3,1], 'wb1'),
-      'wb2' => Bishop.new(self, 'white', @white[:Bishop], [6,1], 'wb2'),
-      'bb1' => Bishop.new(self, 'black', @black[:Bishop], [3,8], 'bb1'),
-      'bb2' => Bishop.new(self, 'black', @black[:Bishop], [6,8], 'bb2'),
-      'wq' => Queen.new(self, 'white', @white[:Queen], [4,1], 'wq'),
-      'bq' => Queen.new(self, 'black', @black[:Queen], [5,8], 'bq'),
-      'bk' => King.new(self, 'black', @black[:King], [4,8], 'bk'),
-      'wk' => King.new(self, 'white', @white[:King], [5,1], 'wk')
+      'wr1' => Rook.new(self, 'white', @white[:Rook], [1, 1], 'wr1'),
+      'wr2' => Rook.new(self, 'white', @white[:Rook], [8, 1], 'wr2'),
+      'br1' => Rook.new(self, 'black', @black[:Rook], [1, 8], 'br1'),
+      'br2' => Rook.new(self, 'black', @black[:Rook], [8, 8], 'br2'),
+      'wk1' => Knight.new(self, 'white', @white[:Knight], [2, 1], 'wk1'),
+      'wk2' => Knight.new(self, 'white', @white[:Knight], [7, 1], 'wk2'),
+      'bk1' => Knight.new(self, 'black', @black[:Knight], [2, 8], 'bk1'),
+      'bk2' => Knight.new(self, 'black', @black[:Knight], [7, 8], 'bk2'),
+      'wp1' => Pawn.new(self, 'white', @white[:Pawn], [1, 2], 'wp1'),
+      'wp2' => Pawn.new(self, 'white', @white[:Pawn], [2, 2], 'wp2'),
+      'wp3' => Pawn.new(self, 'white', @white[:Pawn], [3, 2], 'wp3'),
+      'wp4' => Pawn.new(self, 'white', @white[:Pawn], [4, 2], 'wp4'),
+      'wp5' => Pawn.new(self, 'white', @white[:Pawn], [5, 2], 'wp5'),
+      'wp6' => Pawn.new(self, 'white', @white[:Pawn], [6, 2], 'wp6'),
+      'wp7' => Pawn.new(self, 'white', @white[:Pawn], [7, 2], 'wp7'),
+      'wp8' => Pawn.new(self, 'white', @white[:Pawn], [8, 2], 'wp8'),
+      'bp1' => Pawn.new(self, 'black', @black[:Pawn], [1, 7], 'bp1'),
+      'bp2' => Pawn.new(self, 'black', @black[:Pawn], [2, 7], 'bp2'),
+      'bp3' => Pawn.new(self, 'black', @black[:Pawn], [3, 7], 'bp3'),
+      'bp4' => Pawn.new(self, 'black', @black[:Pawn], [4, 7], 'bp4'),
+      'bp5' => Pawn.new(self, 'black', @black[:Pawn], [5, 7], 'bp5'),
+      'bp6' => Pawn.new(self, 'black', @black[:Pawn], [6, 7], 'bp6'),
+      'bp7' => Pawn.new(self, 'black', @black[:Pawn], [7, 7], 'bp7'),
+      'bp8' => Pawn.new(self, 'black', @black[:Pawn], [8, 7], 'bp8'),
+      'wb1' => Bishop.new(self, 'white', @white[:Bishop], [3, 1], 'wb1'),
+      'wb2' => Bishop.new(self, 'white', @white[:Bishop], [6, 1], 'wb2'),
+      'bb1' => Bishop.new(self, 'black', @black[:Bishop], [3, 8], 'bb1'),
+      'bb2' => Bishop.new(self, 'black', @black[:Bishop], [6, 8], 'bb2'),
+      'wq' => Queen.new(self, 'white', @white[:Queen], [4, 1], 'wq'),
+      'bq' => Queen.new(self, 'black', @black[:Queen], [5, 8], 'bq'),
+      'bk' => King.new(self, 'black', @black[:King], [4, 8], 'bk'),
+      'wk' => King.new(self, 'white', @white[:King], [5, 1], 'wk')
     }
     @whos_turn = 'white'
     @check = ''
@@ -77,7 +80,7 @@ class Chessboard
     false
   end
 
-  def print_board
+  def print_board # rubocop:todo Metrics/MethodLength
     puts '  ---------------------------------------'
     print "       a   b   c   d   e   f   g   h\n"
     puts '  ---------------------------------------'
@@ -94,7 +97,7 @@ class Chessboard
     puts '  ---------------------------------------'
   end
 
-  # f me this is complicated....
+  # Way too complicated..
   def check_mate?(colour)
     available = []
     if colour == 'black'
@@ -106,31 +109,31 @@ class Chessboard
     end
 
     @troops.each do |key, value|
-      if key.match(opponent)
-        @turn_counter += 1
-        value.still_around(self)
-        poss = value.possible_movements(self)
-        poss.each do |post|
-          value.place(self, post)
-          available_spot = post
-          @troops.each do |key2, value2|
-            unless key2 == 'wk' || key2 == 'bk'
-              if key2.match(our)
-                @turn_counter += 1
-                value2.still_around(self)
-                available_spot = '' if value2.check(self) == colour
-                value2.reverse_kill
-                @turn_counter -= 1
-              end
-            end
-          end
-          available.push(available_spot)
-          value.reverse_place(self, post)
+      next unless key.match(opponent)
+
+      @turn_counter += 1
+      value.still_around(self)
+      poss = value.possible_movements(self)
+      poss.each do |post|
+        value.place(self, post)
+        available_spot = post
+        @troops.each do |key2, value2|
+          next if key2 == 'wk' || key2 == 'bk'
+          next unless key2.match(our)
+
+          @turn_counter += 1
+          value2.still_around(self)
+          available_spot = '' if value2.check(self) == colour
+          value2.reverse_kill
           @turn_counter -= 1
         end
+        available.push(available_spot)
+        value.reverse_place(self, post)
+        @turn_counter -= 1
       end
     end
     return true if available.empty?
+
     false
   end
 end

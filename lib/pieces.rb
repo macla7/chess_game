@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class Piece
-  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead, :died_when, :checked
+  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead, :died_when
   attr_accessor :checked
   def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
     still_around(game)
     return if @dead == true
-    
+
     @possible = []
     @game = game
     @symbol = symbol
@@ -20,7 +22,6 @@ class Piece
     @enemy = 'black' if @colour == 'white'
     @enemy = 'white' if @colour == 'black'
     @dead = false
-
   end
 
   def possible_movements(game)
@@ -42,7 +43,7 @@ class Piece
           value.reverse_kill if game.turn_counter == value.died_when
         end
         reverse_place(game, post)
-        safe_moves.push(post) if !@are_we_in_check
+        safe_moves.push(post) unless @are_we_in_check
         @possible = safe_moves
         @are_we_in_check = false
       end
@@ -55,6 +56,7 @@ class Piece
     castle_move_long(game)
     castle_move_short(game)
     return [] if @dead
+
     if @possible.include?(end_pos)
       place(game, end_pos[0..1])
       wip_es(game)
@@ -94,6 +96,7 @@ class Piece
 
   def place(game, end_pos)
     return if @dead
+
     @last_killed = game.board["#{end_pos[0]}, #{end_pos[1]}"]
     @last_spot = @pos
     game.board["#{pos[0]}, #{pos[1]}"] = ' '
@@ -107,6 +110,7 @@ class Piece
 
   def reverse_place(game, end_pos)
     return if @dead
+
     @pos = @last_spot
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
@@ -154,7 +158,6 @@ class Piece
   end
 
   def reverse_kill
-    #should have if including -->  @died_when == game.turn_counter && 
     if @dead
       @dead = false
       @pos = @died_at
