@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead, :died_when
+  attr_reader :possible, :game, :pos, :last_spot, :move_counter, :symbol, :died_at, :name, :colour, :dead, :died_when, :checked
   attr_accessor :checked
   def initialize(game, colour, symbol, pos = [1,1], name)
     @pos = pos
@@ -25,7 +25,7 @@ class Piece
 
   def possible_movements(game)
     return [] if @dead
-    # THIS FUNCTION AND THE CHECK BITS ASSOICATED WITH IT ARE ONLY DONE FOR BALCK ATM.
+
     @possible = possible_moves(game)
     unless @king
       safe_moves = []
@@ -56,7 +56,7 @@ class Piece
     castle_move_short(game)
     return [] if @dead
     if @possible.include?(end_pos)
-      place(game, end_pos)
+      place(game, end_pos[0..1])
       wip_es(game)
     else
       puts "Can't move to #{end_pos}, sorry!"
@@ -69,17 +69,17 @@ class Piece
   end
 
   def castle_move_long(game)
-    return unless @possible[0][2] == 'castle-long'
+    return @possible if @possible == [] || @possible[0][2] != 'castle-long'
+
     game.troops['wr1'].place(game, [4,1]) if @colour == 'white'
     game.troops['br2'].place(game, [5,8]) if @colour == 'black'
-    @possible[0].pop
   end
 
   def castle_move_short(game)
-    return unless @possible[0][2] == 'castle-short'
+    return @possible if @possible == [] || @possible[0][2] != 'castle-short'
+
     game.troops['wr2'].place(game, [6,1]) if @colour == 'white'
     game.troops['br1'].place(game, [3,8]) if @colour == 'black'
-    @possible[0].pop
   end
 
   def wip_es(game)
@@ -111,7 +111,6 @@ class Piece
     game.board["#{@pos[0]}, #{@pos[1]}"] = @symbol
     game.board["#{end_pos[0]}, #{end_pos[1]}"] = @last_killed
     @move_counter -= 1 if @move_counter.positive?
-    p
   end
 
   def moves(game, end_pos)

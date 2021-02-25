@@ -39,7 +39,7 @@ class Pawn < Piece
     @possible
   end
 
-  def move_piece(game, end_pos)
+  def move_piece(game, end_pos, piece = '')
     # order is super important here.
     @old_pos = @pos
     super(game, end_pos)
@@ -49,7 +49,7 @@ class Pawn < Piece
     end
     en_passant_kill(game, end_pos)
     if promotion?
-      promote(game)
+      promote(game, piece)
     end
   end
 
@@ -58,6 +58,9 @@ class Pawn < Piece
     if @last_killed == 'e'
       game.board["#{end_pos[0]}, #{end_pos[1]-@j}"] = ' ' if @colour == 'white'
       game.board["#{end_pos[0]}, #{end_pos[1]-@j}"] = ' ' if @colour == 'black'
+    end
+    game.troops.each do |_key, value|
+      value.still_around(game)
     end
   end
 
@@ -81,13 +84,12 @@ class Pawn < Piece
     false
   end
 
-  def promote(game)
+  def promote(game, piece)
     puts '  What kind of piece would you like to promote to?'
     puts "  Please pick one of the following.\n"
     game.white.each do |key, _value|
       puts "  - #{key}" unless key == :King || key == :Pawn
     end
-    piece = ''
     while !game.white.key?(piece)
       piece = gets.chomp.to_sym
       p piece
@@ -123,11 +125,5 @@ class Pawn < Piece
       game.troops["#{@name}_prom"].checked = checked
       still_around(game)
     end
-    puts '3..'
-    sleep 1
-    puts '2..'
-    sleep 1
-    puts '1..'
-    sleep 1
   end
 end

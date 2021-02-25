@@ -115,7 +115,7 @@ def pick_move(game, piece, colour, in_check)
       possible_y = []
       across = ''
       up = ''
-      
+
       game.troops[piece].possible_movements(game).each do |move|
         puts "\t#{convert_number(move[0])} - #{move[1]}"
         possible_x.push(move[0])
@@ -190,9 +190,6 @@ def turn(game, colour, enemy, in_check = false)
     game.troops[piece].move_piece(game, move)
     game.troops.each do |key, value|
       value.still_around(game)
-      if key == 'bp4'
-        p value.dead
-      end
     end
     clear_and_print(game, colour, in_check)
     game.troops[piece]
@@ -203,7 +200,6 @@ def check_sequence(game, colour, checker, old_pos)
   if game.check_mate?(colour)
     return 'check mate'
   end
-  p " how we doing #{game.troops['bq'].dead}"
   loop do
     last_piece = turn(game, colour, checker.colour, true)
     if !checker.check(game, checker.pos)
@@ -261,7 +257,7 @@ def choose_game
     mtime = mtime[0..18]
     print "\n   #{file.gsub('_', ' ')}\t "
     print "\t " if file.length < 5
-    print "\t " if file.length < 12
+    print "\t " if file.length < 13
     print mtime
   end
   begin

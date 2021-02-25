@@ -7,12 +7,12 @@ Plan now:
 2. Write tests for important featuers including but not limited to
 - check                                                  -- X
 - checkmate                                              -- X
-- castle long
-- castle short
+- castle long                                            -- X
+- castle short                                           -- X
 - Not being able to take checker if new checker checks   -- X
 - Not being able to move into check                      -- X
-- en passant
-- promotions
+- en passant                                             -- X
+- promotions                                             -- X
 3. Ruby cop and clean away waste, try and minimise amounts of loops and what not.
 4. Ponder on where project could be better done structurally, and play!
 
